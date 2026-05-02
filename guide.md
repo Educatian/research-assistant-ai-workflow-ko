@@ -292,6 +292,11 @@ ObsidianVault/
     └── (activity/, situation/는 나중에 자동 생성됨)
 ```
 
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI에 그대로 붙여넣기</div>
+<pre>내 vault `C:\Users\&lt;나&gt;\ObsidianVault\` 안에 wiki/ 폴더 + 그 안에 entities/, concepts/, sources/ 세 하위 폴더를 만들어줘. 각 폴더에 한 줄 README.md (그 폴더가 무엇을 담는지 설명)도 넣어줘.</pre>
+</div>
+
 ### 단계 1.3 — 첫 entity 페이지
 
 가장 활발한 프로젝트 하나만 선택하세요. 아래 예시는 가상의 *Project A*를 사용 — 본인 프로젝트 이름으로 바꿔 쓰시면 됩니다. `wiki/entities/Project A.md` 새 파일 생성:
@@ -332,6 +337,18 @@ related:
 > - 그래프 뷰(Ctrl+G)에 엣지로 표시
 
 > 💡 **위키링크 `[[...]]`**: Obsidian 안에서 다른 페이지 링크. 아직 그 페이지가 없어도 괜찮음 — 자동 stub으로 추적됨.
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI에 그대로 붙여넣기</div>
+<pre>내 가장 활발한 프로젝트는 [프로젝트명]이야. 가이드 Day 1 단계 1.3 템플릿대로 wiki/entities/[프로젝트명].md를 만들어줘. frontmatter 채우기:
+- type: project
+- status: active
+- tier: 2
+- deadline: [YYYY-MM-DD]
+- related에 내 이름 + 자주 쓰는 메서드 1-2개 wikilink
+
+본문에는 한 문장 프로젝트 설명, PI / Methods / Status 불릿, 그리고 ## 현재 이슈 섹션 추가해줘.</pre>
+</div>
 
 ### 단계 1.4 — 같은 방식으로 1-2개 더
 
@@ -394,6 +411,17 @@ title: "Today — 단일 진입점"
 (Day 4-7에 추가됨)
 ```
 
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI에 그대로 붙여넣기</div>
+<pre>내 vault에 wiki/Today.md를 가이드 Day 2 템플릿으로 만들어줘. § 2 마감과 § 3 우선순위는 내 정보로 채워:
+- 마감: [그랜트명] [YYYY-MM-DD]
+- Tier 1: [현재 마감 임박 프로젝트]
+- Tier 2: [능동 개발 프로젝트 1-3개]
+- Tier 3: [백로그 프로젝트들]
+
+§ 4의 BEGIN/END AUTO RECENT 마커는 그대로 둬 — Day 4에 자동 채워질 자리. 그리고 Obsidian에서 Pin 처리도 안내해줘.</pre>
+</div>
+
 ### 단계 2.2 — 본인 데이터로 채우기
 
 § 2 (마감), § 3 (Tier 1-3 프로젝트) 만 본인 데이터로 채워주세요. 나머지는 자동화가 채울 자리입니다.
@@ -433,6 +461,16 @@ Obsidian에서 `Today.md` 우클릭 → "Pin" — 늘 상단 탭에 떠있게.
 - 한국어 응답 OK (사용자 한국인).
 - 짧고 직접적으로. 자기 요약 반복 X.
 ```
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI에 그대로 붙여넣기</div>
+<pre>`C:\Users\<나>\CLAUDE.md` 파일을 만들어줘. 가이드 Day 3 단계 3.1 템플릿대로:
+- "매 세션 시작 시" 섹션 (Today.md 먼저 읽으라는 지시)
+- "지식 위치" 표 (entities / concepts / activity)
+- "사용자 스타일" (한국어 OK, 짧고 직접적)
+
+내 vault 경로는 C:\Users\<나>\ObsidianVault\ 야.</pre>
+</div>
 
 ### 단계 3.2 — 세션 자동 기록 hook 등록
 
@@ -481,6 +519,20 @@ Add-Content -Path $LogFile -Value $line -Encoding UTF8
 ```
 
 이 단계는 *최소 버전*입니다. 한 줄짜리 로그만 남기지만, hook이 동작하는 걸 확인하는 게 목표.
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI에 그대로 붙여넣기 — Day 3 hook 셋업 통째로</div>
+<pre>가이드 Day 3 단계 3.2-3.3을 셋업해줘:
+
+1. `~\.claude\settings.json`에 Stop hook 추가 (없으면 파일 생성). 명령은:
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\<나>\ObsidianVault\scripts\save_session.ps1 -Source claude
+
+2. `C:\Users\<나>\ObsidianVault\scripts\save_session.ps1` 만들어줘. 동작:
+   - Stop hook의 stdin JSON 받기 (session_id 등)
+   - 매 세션 종료시 wiki\log.md에 "- YYYY-MM-DD HH:mm [claude SID8] session ended" 한 줄 append
+
+스크립트 디렉토리가 없으면 만들고, settings.json 따옴표 escape (Windows backslash 두 번) 주의해줘.</pre>
+</div>
 
 ### 단계 3.4 — 검증
 
@@ -535,6 +587,20 @@ Write-Output "Wrote $note"
 ```
 
 ### 단계 4.2 — Windows 예약 작업 등록
+
+**방법 A — Claude Code/Codex CLI에 자연어로 (추천)**:
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI에 그대로 붙여넣기</div>
+<pre>"ResearchAssistantTracker"라는 Windows 예약 작업을 등록해줘. 조건:
+- 매일 00:00 시작 → 매 120분(2시간)마다 → 23:59 동안 반복 (하루 12회: 00, 02, 04 ... 22시)
+- 실행 명령: powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\<나>\ObsidianVault\scripts\daily_tracker.ps1
+- 추가 옵션: StartWhenAvailable=true (놓친 슬롯 가능한 빨리 보충), DisallowStartIfOnBatteries=false, StopIfGoingOnBatteries=false (배터리 무관 실행)
+
+schtasks.exe로 만들고 그다음 Get-ScheduledTask + Set-ScheduledTask로 위 옵션들 켜줘. 등록 완료되면 schtasks /Query로 다음 실행 시각 확인해서 보여줘.</pre>
+</div>
+
+**방법 B — 직접 입력 (raw)**:
 
 PowerShell을 관리자 권한으로 실행 → 다음 명령:
 
@@ -631,6 +697,17 @@ powershell.exe -File C:\Users\<you>\ObsidianVault\scripts\daily_tracker.ps1
 
 > 💡 **JSON-LD?** "JSON for Linked Data" — 평범한 JSON에 **`@context`** (어떤 단어가 어떤 의미인지 사전) + **`@graph`** (실제 노드 목록)를 추가한 W3C 표준. RDF·SPARQL 같은 시맨틱 웹 기술과 호환됩니다. 학위논문에서 인용도 가능.
 
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI — Day 5 ontology 셋업 통째로</div>
+<pre>가이드 풀 버전 (https://educatian.github.io/research-assistant-ai-workflow-ko/) 의 build_ontology.py를 내 vault scripts/에 가져와줘. 그다음:
+
+1. python build_ontology.py 한 번 실행 → wiki/_ontology.json + _ontology_summary.md + _ontology_graph.html 생성 확인
+2. daily_tracker.ps1 끝부분에 `& python "$VaultRoot\scripts\build_ontology.py"` 한 줄 추가 (매 트래커 실행마다 ontology 재빌드)
+3. _ontology_graph.html 브라우저로 열어서 본인 노드들 시각적으로 확인
+
+내 vault: C:\Users\<나>\ObsidianVault\</pre>
+</div>
+
 ### 단계 5.1 — `build_ontology.py` 다운로드
 
 이 가이드의 풀 버전 (`Research Assistant System Guide.md`)에 ~600줄 짜리 Python 스크립트가 있습니다. 그걸 `scripts/build_ontology.py`로 복사하세요. 핵심 동작:
@@ -704,6 +781,19 @@ C:\Users\<you>\Desktop\_secrets\openrouter.txt   ← 이 파일에 키 한 줄
 
 > ⚠️ **`_secrets/` 폴더는 절대 vault 안에 두지 마세요.** vault는 옵시디언이 인덱싱하고 (잠재적으로) 동기화될 수 있는 공간. 키는 **별도 폴더**.
 
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI — Day 6 LLM 변화감지 셋업 통째로</div>
+<pre>Day 6 situation_watch 셋업 도와줘:
+
+1. OpenRouter API key를 C:\Users\<나>\Desktop\_secrets\openrouter.txt 한 줄로 저장 (vault 안에 절대 두지 말고)
+2. 가이드 풀 버전의 situation_watch.py + apply_situation.py 두 스크립트를 vault scripts/에 가져와줘
+3. 첫 실행: python situation_watch.py --hours 168 (지난 7일 윈도우)
+4. wiki/situation/<오늘날짜>.md 파일에 [AUTO]/[REVIEW] 변화 제안 잘 들어왔는지 확인
+5. daily_tracker.ps1 끝에 `& python "$VaultRoot\scripts\situation_watch.py" --hours 24` 추가
+
+내 vault: C:\Users\<나>\ObsidianVault\</pre>
+</div>
+
 ### 단계 6.2 — `situation_watch.py`
 
 가이드 풀 버전의 스크립트를 복사 (~250줄). 핵심 동작:
@@ -760,6 +850,31 @@ python C:\Users\<you>\ObsidianVault\scripts\apply_situation.py
 ## Day 7 — /slides — 발표자료 자동 생성
 
 **오늘의 목표**: 본인이 *"AI 윤리 강의용 슬라이드 만들어줘"* 한 줄 입력하면, vault 콘텐츠를 끌어와서 단일 HTML 슬라이드덱이 자동 생성되게 합니다.
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code/Codex CLI — Day 7 슬라이드 워크플로 셋업 통째로</div>
+<pre>Day 7 /slides 워크플로를 셋업해줘:
+
+1. open-design 5개 스킬을 Desktop\_tools\open-design-cache\skills\에 캐시:
+   - magazine-web-ppt (기본 매거진 스타일)
+   - html-ppt-knowledge-arch-blueprint (메서드론·아키텍처)
+   - html-ppt-course-module (강의·워크샵)
+   - html-ppt-pitch-deck (그랜트·피치)
+   - html-ppt-product-launch (제품 발표)
+
+   각 스킬의 SKILL.md, references/*.md, assets/template.html (또는 example.html)을
+   `gh api repos/nexu-io/open-design/contents/skills/<id>/<file> --jq .content | base64 -d` 로 가져와서
+   해당 로컬 폴더에 저장. 코드는 절대 실행하지 말고 마크다운만 읽기.
+
+2. ~\.claude\commands\slides.md 슬래시 커맨드 만들어줘. 가이드 Day 7 단계 7.2 spec대로:
+   - 토픽에 맞는 스킬 자동 선택 (강의→course-module, 메서드→blueprint, 기본→magazine)
+   - 스킬 SKILL.md + references + 템플릿 읽기
+   - vault entity / ontology 콘텐츠 끌어오기
+   - 8-15 슬라이드 outline 먼저 제안 → 사용자 OK → 단일 self-contained HTML 생성
+   - 출력 위치: Desktop\_PTs\<날짜>_<슬러그>\index.html
+
+3. 셋업 끝나면 테스트: /slides [내 프로젝트명]</pre>
+</div>
 
 ### 단계 7.1 — open-design 스킬 캐시
 

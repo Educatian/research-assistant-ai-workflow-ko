@@ -827,6 +827,34 @@ def render(md_path: Path, out_path: Path) -> None:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{htmllib.escape(title)}</title>
+
+<!-- SEO + canonical -->
+<meta name="description" content="Obsidian + Claude Code 7일 셋업 가이드. 박사·연구자용 AI 보조 시스템. 매일 1-2시간 · 월 비용 $1-2 · 로컬 우선.">
+<meta name="author" content="{htmllib.escape(author)}">
+<link rel="canonical" href="https://educatian.github.io/research-assistant-ai-workflow-ko/">
+
+<!-- Open Graph (Facebook, LinkedIn, Discord, KakaoTalk) -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="{htmllib.escape(title)}">
+<meta property="og:description" content="Obsidian × Claude Code 기반 박사·연구자용 AI 보조 시스템 — 7일 셋업 튜토리얼. 차근차근 그림과 함께.">
+<meta property="og:url" content="https://educatian.github.io/research-assistant-ai-workflow-ko/">
+<meta property="og:image" content="https://educatian.github.io/research-assistant-ai-workflow-ko/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="연구보조 시스템 초심자 7-day 가이드 — 작성자 문제웅, The University of Alabama">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Research Assistant AI Workflow">
+<meta property="article:author" content="{htmllib.escape(author)}">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{htmllib.escape(title)}">
+<meta name="twitter:description" content="Obsidian × Claude Code 기반 박사·연구자용 AI 보조 시스템 — 7일 셋업 튜토리얼.">
+<meta name="twitter:image" content="https://educatian.github.io/research-assistant-ai-workflow-ko/og.png">
+<meta name="twitter:image:alt" content="연구보조 시스템 초심자 7-day 가이드">
+
+<!-- Discord embed color -->
+<meta name="theme-color" content="#2d7d6e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -914,6 +942,25 @@ def render(md_path: Path, out_path: Path) -> None:
     a.classList.add('active');
     if (a.parentElement) a.parentElement.classList.add('has-active');
   }}));
+
+  // Click-to-copy on prompt boxes
+  document.querySelectorAll('.prompt-box').forEach(box => {{
+    box.addEventListener('click', async () => {{
+      const pre = box.querySelector('pre');
+      if (!pre) return;
+      try {{
+        await navigator.clipboard.writeText(pre.innerText.trim());
+        box.classList.add('copied');
+        setTimeout(() => box.classList.remove('copied'), 1500);
+      }} catch (e) {{
+        const sel = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }}
+    }});
+  }});
   document.addEventListener('keydown', e => {{
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'f' || e.key === 'F') document.body.classList.toggle('narrow');
@@ -1448,6 +1495,57 @@ body.narrow .prose { max-width: 620px; }
 .callout-tip   { border-left-color: var(--accent-2); background: #fff8ed; }
 .callout-warn  { border-left-color: var(--accent-3); background: #fdf2ee; }
 .callout-check { border-left-color: var(--accent);   background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+
+/* Prompt-box: side-by-side natural-language alternative to raw commands.
+   Indigo/purple to distinguish from teal (TIP) / orange (WARN) / green (CHECK). */
+.prompt-box {
+  margin: 18px 0 28px;
+  border: 1.5px solid #9b7eb7;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, #9b7eb7 5%, var(--surface));
+  overflow: hidden;
+  position: relative;
+}
+.prompt-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: #9b7eb7;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prompt-label .prompt-icon { font-size: 13px; }
+.prompt-box pre {
+  margin: 0;
+  padding: 18px 22px;
+  background: transparent;
+  color: var(--text-1);
+  border: none;
+  border-left: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+.prompt-box pre::before { content: none; }
+.prompt-box::after {
+  content: "📋 클릭해서 복사";
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #9b7eb7;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.prompt-box.copied::after { content: "✓ 복사됨"; opacity: 1; color: var(--accent); }
+.prompt-box pre { cursor: pointer; }
 
 .callout strong {
   color: var(--text-1);
