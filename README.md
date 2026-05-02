@@ -2,7 +2,7 @@
 
 > Obsidian × Claude Code 기반 박사·연구자용 AI 보조 시스템 7-day 셋업 가이드.
 
-🌐 **Live**: <https://educatian.github.io/research-assistant-ai-workflow/>
+🌐 **Live**: <https://educatian.github.io/research-assistant-ai-workflow-ko/>
 
 ---
 
