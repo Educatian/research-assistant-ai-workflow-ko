@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>연구보조 시스템 - 초심자 튜토리얼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Hahmlet:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<style>
+/* Adapted directly from open-design html-ppt-course-module skill tokens
+   (warm paper + teal-green accent), adjusted for long-form scrolling docs. */
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1e8;
+  --bg-rgb: 251,250,246;
+  --surface: #ffffff;
+  --surface-2: #f6f3ea;
+  --border: rgba(60,45,20,.12);
+  --border-strong: rgba(60,45,20,.24);
+  --text-1: #2a2418;
+  --text-2: #5a5140;
+  --text-3: #8a7f68;
+  --text-rgb: 42,36,24;
+  --accent:   #2d7d6e;   /* teal-green */
+  --accent-2: #d88a3a;   /* warm orange */
+  --accent-3: #c4593f;   /* rust */
+  --good: #4a7c59;
+  --warn: #d88a3a;
+  --bad:  #c4593f;
+  --grad: linear-gradient(135deg,#2d7d6e,#4ea893);
+  --shadow: 0 12px 30px rgba(60,45,20,.07);
+  --shadow-lg: 0 24px 60px rgba(60,45,20,.12);
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --serif: "Hahmlet", "Playfair Display", "Apple SD Gothic Neo", Georgia, serif;
+  --sans: "Pretendard Variable", "Pretendard", "Inter", -apple-system, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", "Cascadia Code", "D2Coding", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv11";  /* Pretendard polish */
+  word-break: keep-all;        /* Korean line-break preserves words */
+  overflow-wrap: break-word;
+}
+body.dark {
+  --bg: #1c1812;
+  --bg-soft: #2a2418;
+  --surface: #2a2418;
+  --surface-2: #322a1d;
+  --border: rgba(244,241,232,.08);
+  --border-strong: rgba(244,241,232,.18);
+  --text-1: #f4f1e8;
+  --text-2: #c2b89f;
+  --text-3: #8a7f68;
+  --text-rgb: 244,241,232;
+}
+
+/* Masthead — course-module hero feel */
+.masthead {
+  padding: 96px 5vw 64px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.masthead::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.mast-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.mast-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 24px;
+}
+.mast-kicker::before { content: "✦ "; color: var(--accent); }
+.mast-title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  color: var(--text-1);
+}
+.mast-deck {
+  font-family: var(--sans);
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-2);
+  margin: 0 0 28px;
+  max-width: 680px;
+}
+.mast-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 40px;
+  padding: 12px 0;
+  border-top: 1px dashed var(--border);
+  border-bottom: 1px dashed var(--border);
+  max-width: 680px;
+}
+.byline-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.byline-name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.005em;
+}
+.byline-aff {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-2);
+}
+.byline-sep {
+  color: var(--text-3);
+  font-size: 12px;
+}
+.byline-mail {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-2);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent-2);
+  padding-bottom: 1px;
+}
+.byline-mail:hover { color: var(--accent-3); border-color: var(--accent-3); }
+.mast-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 760px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.mast-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 24px 20px 0;
+  border-right: 1px dashed var(--border);
+}
+.mast-meta > div:last-child { border-right: none; }
+.mast-meta span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.mast-meta strong {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Layout — sidebar + main, course-module style */
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 72px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 72px 5vw 96px;
+}
+
+/* TOC sidebar — mimics course-module .obj-list with ○/●/▸ progression */
+.toc {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+  /* internal scroll when TOC exceeds viewport */
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid var(--border);
+  padding: 4px 24px 16px 0;
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+/* WebKit scrollbar — thin teal */
+.toc::-webkit-scrollbar { width: 4px; }
+.toc::-webkit-scrollbar-track { background: transparent; }
+.toc::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 50%, transparent);
+  border-radius: 2px;
+}
+.toc::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.toc-brand {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.toc-brand::before { content: "✦"; color: var(--accent-2); font-size: 18px; }
+.toc-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-3);
+  margin: 0 0 14px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.45;
+}
+.toc li {
+  padding: 7px 0 7px 22px;
+  position: relative;
+  border-bottom: 1px dashed var(--border);
+}
+.toc li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+.toc li.lvl1 { font-weight: 600; }
+.toc li.lvl1::before { content: "●"; }
+.toc li.lvl2 { padding-left: 32px; font-size: 12px; }
+.toc li.lvl2::before { left: 12px; font-size: 10px; top: 8px; }
+.toc a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  line-height: 1.4;
+  transition: color 0.15s;
+}
+.toc a:hover { color: var(--text-1); }
+.toc li:hover::before { color: var(--accent-2); }
+
+/* Active state — bullet becomes filled accent-2 (warm orange) */
+.toc li.has-active::before,
+.toc li:has(> a.active)::before {
+  content: "●";
+  color: var(--accent-2);
+  transform: scale(1.15);
+}
+.toc li.has-active,
+.toc li:has(> a.active) {
+  color: var(--text-1);
+  font-weight: 700;
+}
+.toc li.has-active > a,
+.toc li:has(> a.active) > a {
+  color: var(--accent-3);
+}
+.toc .num {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-right: 6px;
+}
+.toc-foot {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+}
+.toc-foot p { margin: 4px 0; }
+.toc-foot kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+/* Prose — academic but friendly */
+.prose {
+  max-width: 760px;
+  font-size: 17px;
+  line-height: 1.8;
+  counter-reset: section;
+}
+body.narrow .prose { max-width: 620px; }
+
+.prose h1 {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(36px, 4vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 64px 0 32px;
+  color: var(--text-1);
+}
+
+.prose h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 96px 0 24px;
+  color: var(--text-1);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  position: relative;
+}
+.prose h2::before {
+  content: counter(section, decimal-leading-zero);
+  counter-increment: section;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-2);
+  letter-spacing: 0.1em;
+  background: var(--surface-2);
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  flex: none;
+  position: relative;
+  top: -4px;
+}
+.prose h2::after {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: 0;
+  width: 72px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.prose h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.005em;
+  margin: 48px 0 14px;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.prose h3::before {
+  content: "";
+  width: 4px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.prose p { margin: 0 0 20px; color: var(--text-2); }
+.prose p strong { color: var(--text-1); font-weight: 700; }
+.prose em { font-style: italic; color: var(--text-2); }
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+.prose a:hover { color: var(--accent-3); text-decoration-color: var(--accent-3); }
+.prose ul, .prose ol { margin: 0 0 20px; padding-left: 20px; color: var(--text-2); }
+.prose li { margin-bottom: 8px; }
+.prose ul li { list-style: none; position: relative; padding-left: 6px; }
+.prose ul li::before {
+  content: "○";
+  color: var(--accent);
+  position: absolute;
+  left: -16px;
+  top: 0;
+}
+.prose ol li::marker { color: var(--accent); font-weight: 600; }
+
+/* Inline code */
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--accent-3);
+}
+
+/* Block code — course-module dark warm-brown */
+.prose pre {
+  background: #2a2418;
+  color: #f4f1e8;
+  padding: 22px 26px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin: 24px 0;
+  font-family: var(--mono);
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.prose pre::before {
+  content: "code";
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a7f68;
+}
+.prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Wikilink chip — cream pill */
+.wikilink {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.84em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* Tables — academic concept-box vibe */
+.prose table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 32px 0;
+  font-size: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.prose th, .prose td {
+  text-align: left;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.prose tr:last-child td { border-bottom: none; }
+.prose th {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 12px;
+  font-weight: 700;
+}
+.prose tr:hover td { background: color-mix(in srgb, var(--accent) 4%, transparent); }
+.prose td code { font-size: 12px; }
+
+/* Callouts — directly mirroring course-module .callout */
+.callout {
+  margin: 28px 0;
+  padding: 18px 24px;
+  border-left: 4px solid;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface-2);
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+.callout-tip   { border-left-color: var(--accent-2); background: #fff8ed; }
+.callout-warn  { border-left-color: var(--accent-3); background: #fdf2ee; }
+.callout-check { border-left-color: var(--accent);   background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+
+.callout strong {
+  color: var(--text-1);
+  font-weight: 700;
+}
+.callout-tip strong b, .callout-tip > b { color: var(--accent-2); }
+
+.cb {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-right: 12px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+.callout-tip .cb   { background: var(--accent-2); color: #fff; }
+.callout-warn .cb  { background: var(--accent-3); color: #fff; }
+.callout-check .cb { background: var(--accent);   color: #fff; }
+
+/* Day exercise blocks — auto-detect "Day N —" h2 sections */
+.prose h2[id^="day-"]::before { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Concept callout (the > with no emoji prefix becomes a regular blockquote) */
+.prose blockquote {
+  margin: 28px 0;
+  padding: 20px 26px;
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-family: var(--serif);
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text-2);
+  box-shadow: var(--shadow);
+}
+.prose blockquote strong {
+  font-style: normal;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-weight: 700;
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+/* Diagrams — concept-box style cards */
+.diagram {
+  margin: 40px 0;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.diagram::before {
+  content: "FIG";
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+}
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.diagram figcaption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-2);
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border);
+  text-align: center;
+}
+
+.diagram-hero {
+  margin: 0 -5vw 64px;
+  padding: 0;
+  background: linear-gradient(135deg, #2a2418 0%, #3a2f1c 100%);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.diagram-hero::before { display: none; }
+
+.diagram-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+.diagram-pair::before { display: none; }
+.pair-side {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.pair-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: var(--text-3);
+  color: var(--surface);
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+}
+.pair-arrow {
+  font-family: var(--serif);
+  font-size: 36px;
+  color: var(--accent-2);
+  text-align: center;
+}
+.pair-caption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  text-align: center;
+  margin: 14px 0 0;
+  color: var(--text-2);
+}
+
+/* Day exercise / phase divider — show 7-day timeline at top of each day */
+.prose h2[id^="day-"] {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, var(--bg)), transparent);
+  padding: 16px 20px 16px 0;
+  margin-left: -20px;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+/* Closing */
+.closing {
+  margin-top: 120px;
+  padding: 56px 40px;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border-top: 4px solid var(--accent);
+}
+.closing-mark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+.closing-mark::before, .closing-mark::after { content: "✦"; color: var(--accent-2); margin: 0 12px; font-style: normal; }
+.closing-note {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text-2);
+}
+.closing-author {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.closing-author-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.closing-author strong {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.closing-author a {
+  color: var(--accent-2);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  border-bottom: 1px dashed var(--accent-2);
+}
+.closing-author a:hover { color: var(--accent-3); border-color: var(--accent-3); }
+
+/* Footer */
+.bottom {
+  border-top: 1px solid var(--border);
+  background: #2a2418;
+  color: #f4f1e8;
+  padding: 32px 5vw;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bottom-inner {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
+}
+.bottom-inner span:first-child::before {
+  content: "✦";
+  color: var(--accent-2);
+  margin-right: 8px;
+}
+
+/* Subtle paper texture (optional) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 20%, rgba(216,138,58,0.02), transparent 40%),
+    radial-gradient(circle at 75% 80%, rgba(45,125,110,0.02), transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 40px; padding-top: 48px; }
+  .toc { position: static; padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+  .mast-meta { grid-template-columns: repeat(2, 1fr); }
+  .mast-meta > div:nth-child(2) { border-right: none; }
+  .diagram-pair { grid-template-columns: 1fr; }
+  .pair-arrow { transform: rotate(90deg); padding: 12px 0; }
+  .bottom-inner { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .diagram-hero { margin-left: -5vw; margin-right: -5vw; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-kicker">VOL.01 · BEGINNER · 2026 SPRING</div>
+    <h1 class="mast-title">연구보조 시스템 - 초심자 튜토리얼</h1>
+    <p class="mast-deck">Obsidian + Claude Code 7일 셋업 가이드 — 차근차근, 그림과 함께.</p>
+    <div class="mast-byline">
+      <span class="byline-label">by</span>
+      <span class="byline-name">문제웅</span>
+      <span class="byline-sep">·</span>
+      <span class="byline-aff">The University of Alabama</span>
+      <span class="byline-sep">·</span>
+      <a class="byline-mail" href="mailto:jmoon19@ua.edu">jmoon19@ua.edu</a>
+    </div>
+    <div class="mast-meta">
+      <div><span>총 단계</span><strong>7일</strong></div>
+      <div><span>일일 시간</span><strong>1-2시간</strong></div>
+      <div><span>월 비용</span><strong>$1-2</strong></div>
+      <div><span>대상</span><strong>박사·신진교수·연구자</strong></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-label">목차</div>
+    <ol><li class="lvl1"><a href="#연구자를-위한-ai-보조-시스템-초심자-가이드"><span class="num">01</span> 연구자를 위한 AI 보조 시스템 — 초심자 가이드</a></li>
+<li class="lvl2"><a href="#왜-이걸-해야-할까"><span class="num">02</span> 왜 이걸 해야 할까?</a></li>
+<li class="lvl2"><a href="#0-시작-전-용어-사전"><span class="num">03</span> 0. 시작 전 — 용어 사전</a></li>
+<li class="lvl2"><a href="#05-ai-agents-claude-code와-codex의-역할-분담"><span class="num">04</span> 0.5. AI Agents — Claude Code와 Codex의 역할 분담</a></li>
+<li class="lvl2"><a href="#1-핵심-개념-3층짜리-두-번째-뇌"><span class="num">05</span> 1. 핵심 개념 — 3층짜리 두 번째 뇌</a></li>
+<li class="lvl2"><a href="#2-자동화-흐름-매-2시간-어떤-일이-일어나는가"><span class="num">06</span> 2. 자동화 흐름 — &quot;매 2시간 어떤 일이 일어나는가&quot;</a></li>
+<li class="lvl2"><a href="#3-시작하기-전에-필요한-것"><span class="num">07</span> 3. 시작하기 전에 필요한 것</a></li>
+<li class="lvl2"><a href="#day-1-vault-만들기"><span class="num">08</span> Day 1 — Vault 만들기</a></li>
+<li class="lvl2"><a href="#day-2-todaymd-단일-진입점"><span class="num">09</span> Day 2 — Today.md (단일 진입점)</a></li>
+<li class="lvl2"><a href="#day-3-claude-code-연결-첫-세션-자동-기록"><span class="num">10</span> Day 3 — Claude Code 연결 + 첫 세션 자동 기록</a></li>
+<li class="lvl2"><a href="#day-4-매-2시간-자동-트래커"><span class="num">11</span> Day 4 — 매 2시간 자동 트래커</a></li>
+<li class="lvl2"><a href="#day-5-온톨로지-vault를-검색-가능한-그래프로"><span class="num">12</span> Day 5 — 온톨로지 (vault를 검색 가능한 그래프로)</a></li>
+<li class="lvl2"><a href="#day-6-llm이-본인-노트를-읽고-변화-감지"><span class="num">13</span> Day 6 — LLM이 본인 노트를 읽고 변화 감지</a></li>
+<li class="lvl2"><a href="#day-7-slides-발표자료-자동-생성"><span class="num">14</span> Day 7 — /slides — 발표자료 자동 생성</a></li>
+<li class="lvl2"><a href="#7일-후-일상의-흐름"><span class="num">15</span> 7일 후 — 일상의 흐름</a></li>
+<li class="lvl2"><a href="#실제-시나리오-어떤-상황에서-가장-도움이-되는가"><span class="num">16</span> 실제 시나리오 — 어떤 상황에서 가장 도움이 되는가</a></li>
+<li class="lvl2"><a href="#자주-막히는-곳-트러블슈팅"><span class="num">17</span> 자주 막히는 곳 (트러블슈팅)</a></li>
+<li class="lvl2"><a href="#다음-단계"><span class="num">18</span> 다음 단계</a></li>
+<li class="lvl2"><a href="#모든-커스터마이징은-노트로-기록-권장-패턴"><span class="num">19</span> 모든 커스터마이징은 노트로 기록 (권장 패턴)</a></li>
+<li class="lvl2"><a href="#핵심-원칙-외워두면-좋음"><span class="num">20</span> 핵심 원칙 (외워두면 좋음)</a></li></ol>
+    <div class="toc-foot">
+      <p>키보드</p>
+      <p><kbd>F</kbd> 좁게 · <kbd>D</kbd> 다크모드</p>
+    </div>
+  </aside>
+  <article class="prose">
+    <p>
+<figure class="diagram diagram-hero">
+<svg viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="7-day journey timeline" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2418"/>
+      <stop offset="1" stop-color="#3a2f1c"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#d88a3a" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#d88a3a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="240" fill="url(#hg)"/>
+  <ellipse cx="400" cy="125" rx="380" ry="110" fill="url(#halo)"/>
+
+  <!-- top kicker -->
+  <g fill="#f4f1e8">
+    <text x="400" y="40" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" letter-spacing="4" opacity="0.5">✦ A 7-DAY JOURNEY ✦</text>
+  </g>
+
+  <!-- timeline base line -->
+  <line x1="78" y1="125" x2="722" y2="125" stroke="#f4f1e8" stroke-width="1" stroke-opacity="0.18" stroke-dasharray="2 4"/>
+
+  <!-- 7 milestone groups, evenly spaced cx = 78 + i * 107.33 -->
+  <g font-family="Pretendard Variable, Pretendard, Inter, sans-serif" fill="#f4f1e8">
+
+    <!-- Day 1: Vault (folder icon) -->
+    <g transform="translate(78,125)">
+      <circle r="26" fill="#2a2418" stroke="#2d7d6e" stroke-width="2"/>
+      <path d="M -10,-6 L -2,-6 L 0,-3 L 10,-3 L 10,7 L -10,7 Z" fill="none" stroke="#2d7d6e" stroke-width="1.5" stroke-linejoin="round"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 1</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Vault</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">첫 entity 페이지</text>
+    </g>
+
+    <!-- Day 2: Today (page icon) -->
+    <g transform="translate(185,125)">
+      <circle r="26" fill="#2a2418" stroke="#d88a3a" stroke-width="2"/>
+      <rect x="-8" y="-9" width="16" height="18" fill="none" stroke="#d88a3a" stroke-width="1.5"/>
+      <line x1="-5" y1="-4" x2="5" y2="-4" stroke="#d88a3a" stroke-width="1"/>
+      <line x1="-5" y1="0" x2="5" y2="0" stroke="#d88a3a" stroke-width="1"/>
+      <line x1="-5" y1="4" x2="2" y2="4" stroke="#d88a3a" stroke-width="1"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 2</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Today.md</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">단일 진입점</text>
+    </g>
+
+    <!-- Day 3: Claude (chat icon) -->
+    <g transform="translate(292,125)">
+      <circle r="26" fill="#2a2418" stroke="#9b7eb7" stroke-width="2"/>
+      <path d="M -9,-5 Q -9,-9 -5,-9 L 5,-9 Q 9,-9 9,-5 L 9,2 Q 9,6 5,6 L 0,6 L -3,9 L -3,6 L -5,6 Q -9,6 -9,2 Z" fill="none" stroke="#9b7eb7" stroke-width="1.5" stroke-linejoin="round"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 3</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Claude Code</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">Stop hook 연결</text>
+    </g>
+
+    <!-- Day 4: Tracker (clock icon) -->
+    <g transform="translate(400,125)">
+      <circle r="30" fill="#d88a3a" opacity="0.15"/>
+      <circle r="26" fill="#2a2418" stroke="#d88a3a" stroke-width="2.5"/>
+      <circle cx="0" cy="0" r="9" fill="none" stroke="#d88a3a" stroke-width="1.5"/>
+      <line x1="0" y1="0" x2="0" y2="-6" stroke="#d88a3a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="5" y2="2" stroke="#d88a3a" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 4</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Tracker</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">매 2시간 자동</text>
+    </g>
+
+    <!-- Day 5: Ontology (graph icon) -->
+    <g transform="translate(508,125)">
+      <circle r="26" fill="#2a2418" stroke="#4ea893" stroke-width="2"/>
+      <circle cx="-7" cy="-4" r="2.5" fill="#4ea893"/>
+      <circle cx="7" cy="-4" r="2.5" fill="#4ea893"/>
+      <circle cx="0" cy="6" r="2.5" fill="#4ea893"/>
+      <line x1="-7" y1="-4" x2="7" y2="-4" stroke="#4ea893" stroke-width="1"/>
+      <line x1="-7" y1="-4" x2="0" y2="6" stroke="#4ea893" stroke-width="1"/>
+      <line x1="7" y1="-4" x2="0" y2="6" stroke="#4ea893" stroke-width="1"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 5</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Ontology</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">지식 그래프</text>
+    </g>
+
+    <!-- Day 6: Watch (eye icon) -->
+    <g transform="translate(615,125)">
+      <circle r="26" fill="#2a2418" stroke="#c4593f" stroke-width="2"/>
+      <path d="M -10,0 Q 0,-7 10,0 Q 0,7 -10,0 Z" fill="none" stroke="#c4593f" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="3" fill="#c4593f"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 6</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">Situation</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">변화 감지</text>
+    </g>
+
+    <!-- Day 7: Slides (deck icon) -->
+    <g transform="translate(722,125)">
+      <circle r="26" fill="#2a2418" stroke="#e8a770" stroke-width="2"/>
+      <rect x="-9" y="-3" width="14" height="9" fill="none" stroke="#e8a770" stroke-width="1.5"/>
+      <rect x="-7" y="-6" width="14" height="9" fill="none" stroke="#e8a770" stroke-width="1.2" opacity="0.7"/>
+      <rect x="-5" y="-9" width="14" height="9" fill="none" stroke="#e8a770" stroke-width="1" opacity="0.4"/>
+      <text x="0" y="-44" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" letter-spacing="2" fill="#d88a3a">DAY 7</text>
+      <text x="0" y="50" text-anchor="middle" font-size="14" font-weight="700">/slides</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" opacity="0.7">발표자료 생성</text>
+    </g>
+  </g>
+
+  <!-- bottom subtitle -->
+  <g fill="#f4f1e8">
+    <text x="400" y="218" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" letter-spacing="3" opacity="0.45">매일 1-2시간 · 한 달 약 2달러 · 로컬 우선 · BYOK</text>
+  </g>
+</svg>
+</figure>
+</p>
+<h1 id="연구자를-위한-ai-보조-시스템-초심자-가이드">연구자를 위한 AI 보조 시스템 — 초심자 가이드</h1>
+<blockquote>
+<p><strong>이 가이드는 누구를 위한 것인가?</strong> 본인이 박사과정 / 신진교수 / 연구원이고, <em>수십 개 프로젝트가 폴더 곳곳에 흩어져 있고</em>, <em>"지난주에 그 그랜트 마감이 언제였지?"를 자주 검색해야 하고</em>, <em>Claude Code/ChatGPT를 쓰지만 매번 같은 배경설명을 반복하고 있다면</em> — 이 가이드가 본인을 위한 것입니다.</p>
+<p><strong>결과물</strong>: 본인의 모든 프로젝트·방법론·학생·그랜트가 하나의 검색 가능한 지식 그래프에 들어가고, AI가 작업할 때마다 자동으로 노트를 남기고, 새 정보가 들어올 때마다 그래프가 자동 갱신됩니다.</p>
+</blockquote>
+<hr />
+<h2 id="왜-이걸-해야-할까">왜 이걸 해야 할까?</h2>
+<p>지금 본인의 작업 환경은 아마 이렇게 생겼을 겁니다:</p>
+<p>
+<figure class="diagram diagram-pair">
+  <div class="pair-side pair-before">
+    <div class="pair-label">BEFORE</div>
+    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="280" height="200" fill="#f1f3f5" stroke="#ccc"/>
+      <!-- scattered files -->
+      <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#0a1f3d">
+        <rect x="20" y="20" width="60" height="14" fill="#fff" stroke="#999"/><text x="22" y="31">draft_v3.docx</text>
+        <rect x="120" y="35" width="55" height="14" fill="#fff" stroke="#999"/><text x="122" y="46">slides.pptx</text>
+        <rect x="200" y="15" width="50" height="14" fill="#fff" stroke="#999"/><text x="202" y="26">notes.txt</text>
+        <rect x="60" y="65" width="48" height="14" fill="#fff" stroke="#999"/><text x="62" y="76">draft_v4.docx</text>
+        <rect x="160" y="80" width="60" height="14" fill="#fff" stroke="#999"/><text x="162" y="91">screenshot.png</text>
+        <rect x="20" y="105" width="55" height="14" fill="#fff" stroke="#999"/><text x="22" y="116">grant.docx</text>
+        <rect x="100" y="120" width="60" height="14" fill="#fff" stroke="#999"/><text x="102" y="131">data.csv</text>
+        <rect x="200" y="105" width="50" height="14" fill="#fff" stroke="#999"/><text x="202" y="116">v5.docx</text>
+        <rect x="40" y="150" width="60" height="14" fill="#fff" stroke="#999"/><text x="42" y="161">paper2.pdf</text>
+        <rect x="140" y="155" width="55" height="14" fill="#fff" stroke="#999"/><text x="142" y="166">final.docx</text>
+        <rect x="210" y="150" width="50" height="14" fill="#fff" stroke="#999"/><text x="212" y="161">edit.md</text>
+        <rect x="20" y="175" width="50" height="14" fill="#fff" stroke="#999"/><text x="22" y="186">log.txt</text>
+      </g>
+      <text x="140" y="14" text-anchor="middle" font-family="Inter, sans" font-size="9" fill="#999">Desktop\</text>
+    </svg>
+    <p class="pair-caption">데스크탑 = 검색해야 답을 찾는 무덤</p>
+  </div>
+  <div class="pair-arrow">→</div>
+  <div class="pair-side pair-after">
+    <div class="pair-label" style="background: var(--rust); color: var(--paper);">AFTER</div>
+    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="280" height="200" fill="#f1f3f5" stroke="#0a1f3d"/>
+      <!-- structured -->
+      <g font-family="Inter, sans" font-size="10" fill="#0a1f3d">
+        <rect x="14" y="14" width="252" height="22" fill="#0a1f3d"/>
+        <text x="22" y="29" fill="#f1f3f5" font-family="Playfair Display, serif" font-weight="700">Today.md</text>
+        <text x="200" y="29" fill="#facc15" font-family="IBM Plex Mono, monospace" font-size="9">D-12</text>
+
+        <rect x="14" y="44" width="120" height="50" fill="#fff" stroke="#0a1f3d"/>
+        <text x="22" y="58" font-weight="600">entities/</text>
+        <text x="22" y="72" font-size="9" fill="#666">Project A, B, C, …</text>
+        <text x="22" y="84" font-size="9" fill="#666">12 active</text>
+
+        <rect x="146" y="44" width="120" height="50" fill="#fff" stroke="#0a1f3d"/>
+        <text x="154" y="58" font-weight="600">concepts/</text>
+        <text x="154" y="72" font-size="9" fill="#666">methods, theory</text>
+        <text x="154" y="84" font-size="9" fill="#666">methodology</text>
+
+        <rect x="14" y="104" width="252" height="36" fill="#fff" stroke="#b5392a"/>
+        <text x="22" y="118" font-weight="600">situation/2026-05-02.md</text>
+        <text x="22" y="132" font-size="9" fill="#b5392a">[AUTO] Project A deadline → 2026-09-01</text>
+
+        <rect x="14" y="150" width="252" height="38" fill="#fff" stroke="#0a1f3d"/>
+        <text x="22" y="164" font-weight="600">_ontology.json + graph.html</text>
+        <g stroke="#3b82f6" stroke-width="1" fill="none">
+          <circle cx="40" cy="180" r="3" fill="#3b82f6"/>
+          <circle cx="80" cy="180" r="3" fill="#f59e0b"/>
+          <circle cx="120" cy="180" r="3" fill="#8b5cf6"/>
+          <circle cx="160" cy="180" r="3" fill="#10b981"/>
+          <line x1="43" y1="180" x2="77" y2="180"/>
+          <line x1="83" y1="180" x2="117" y2="180"/>
+          <line x1="123" y1="180" x2="157" y2="180"/>
+        </g>
+        <text x="180" y="183" font-size="9" fill="#666">queryable</text>
+      </g>
+    </svg>
+    <p class="pair-caption">vault = 검색이 필요 없는 한 페이지 진입</p>
+  </div>
+</figure>
+</p>
+<p><strong>왼쪽</strong>: 데스크탑에 PDF, docx, png가 흩어져 있고, 프로젝트 폴더는 16개, <em>"그 프로젝트 메서드 설명을 어디에 적었더라?"</em> 검색이 매일 일어남.</p>
+<p><strong>오른쪽</strong>: 모든 프로젝트가 vault 안 entity 페이지로 정리되고, 자동 트래커가 새 노트를 처리하고, AI에게 <em>"내 프로젝트 X에 대해 알려줘"</em> 한 줄로 모든 컨텍스트를 받음.</p>
+<p>이 가이드를 끝까지 따라가면 오른쪽 상태에 도달합니다. <strong>하루 1-2시간씩 7일.</strong></p>
+<hr />
+<h2 id="0-시작-전-용어-사전">0. 시작 전 — 용어 사전</h2>
+<p>본격적으로 들어가기 전, 가이드 전체에 반복해서 등장하는 7개 용어를 한 번에 정리합니다. 이미 익숙하면 다음 섹션으로 넘어가도 됩니다.</p>
+<table>
+<thead>
+<tr>
+<th>용어</th>
+<th>한 줄 설명</th>
+<th>비유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Vault</strong></td>
+<td>Obsidian의 노트 저장소 = 그냥 마크다운(<code>.md</code>) 파일이 모여있는 폴더 한 개</td>
+<td>"내 모든 노트가 들어있는 책장"</td>
+</tr>
+<tr>
+<td><strong>Entity 페이지</strong></td>
+<td>사물·개념·사람 한 명에 대한 노트 한 장 (<code>wiki/entities/Project A.md</code>)</td>
+<td>위키피디아의 "한 항목"</td>
+</tr>
+<tr>
+<td><strong>Frontmatter</strong></td>
+<td>마크다운 파일 맨 위 <code>---</code> 사이 YAML 메타데이터. 컴퓨터가 자동으로 분류·검색에 쓰는 라벨 영역</td>
+<td>책 표지 안쪽의 도서 정보 페이지</td>
+</tr>
+<tr>
+<td><strong>Wikilink</strong></td>
+<td><code>&lt;span class="wikilink"&gt;프로젝트 A&lt;/span&gt;</code> 같은 옵시디언 문법. 다른 페이지로의 연결. 자동 추적·검색됨</td>
+<td>위키 안에서의 하이퍼링크</td>
+</tr>
+<tr>
+<td><strong>Hook</strong></td>
+<td>특정 이벤트(세션 종료, 파일 변경 등)가 일어나는 순간 자동 실행되는 명령</td>
+<td>도어벨 — 누군가 오면 자동으로 울림</td>
+</tr>
+<tr>
+<td><strong>Ontology (온톨로지)</strong></td>
+<td>"타입(Person·Project·Grant 등)과 관계(hasPI·advises·uses 등)"로 본인의 vault를 표현한 구조화된 그래프. 검색·질의 가능</td>
+<td>가계도 + 조직도를 합친 것</td>
+</tr>
+<tr>
+<td><strong>API key</strong></td>
+<td>OpenRouter 같은 외부 LLM 서비스를 호출할 때 본인을 인증하는 비밀 문자열</td>
+<td>도서관 회원증 (대출시 제시)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **개념 → 파일 매핑**:각 entity는 `.md` 파일 한 개. frontmatter가 그 파일이 어떤 *타입* 인지 명시 (`type: project`). wikilink가 다른 entity와 *관계*를 만듭니다. 이 세 가지가 모이면 자동으로 ontology가 만들어집니다.</div>
+
+<hr />
+<h2 id="05-ai-agents-claude-code와-codex의-역할-분담">0.5. AI Agents — Claude Code와 Codex의 역할 분담</h2>
+<p>이 시스템은 두 개의 AI 코딩 agent를 <strong>상호 보완적으로</strong> 사용합니다. 둘 다 LLM을 백엔드로 쓰지만, <strong>누가 무엇을 잘 하는지</strong>가 다르고 <strong>어떻게 컨트롤하는지</strong>도 다릅니다.</p>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Claude Code vs Codex roles">
+  <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">AI AGENTS · 역할 분담</text>
+
+  <!-- Claude Code column -->
+  <g>
+    <rect x="20" y="40" width="350" height="160" rx="12" fill="#fff" stroke="#2d7d6e" stroke-width="2"/>
+    <text x="40" y="68" font-family="Pretendard Variable, Inter, sans-serif" font-size="18" font-weight="800" fill="#2d7d6e">Claude Code</text>
+    <text x="40" y="86" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="1.5" fill="#8a7f68">PRIMARY · Anthropic</text>
+
+    <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12" fill="#2a2418">
+      <text x="40" y="112">✓ Stop hook 자동 (세션 디제스트)</text>
+      <text x="40" y="132">✓ Slash commands (/slides /recall)</text>
+      <text x="40" y="152">✓ MEMORY.md 자동 로드</text>
+      <text x="40" y="172">✓ CLAUDE.md 부모폴더까지 검색</text>
+      <text x="40" y="192">✓ 200K-1M 컨텍스트</text>
+    </g>
+  </g>
+
+  <!-- Codex column -->
+  <g>
+    <rect x="390" y="40" width="350" height="160" rx="12" fill="#fff" stroke="#d88a3a" stroke-width="2"/>
+    <text x="410" y="68" font-family="Pretendard Variable, Inter, sans-serif" font-size="18" font-weight="800" fill="#d88a3a">Codex</text>
+    <text x="410" y="86" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="1.5" fill="#8a7f68">SECONDARY · OpenAI</text>
+
+    <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12" fill="#2a2418">
+      <text x="410" y="112">○ Hook 없음 (수동 codex_digest.ps1)</text>
+      <text x="410" y="132">○ AGENTS.md 자동 로드</text>
+      <text x="410" y="152">○ 세션 = ~/.codex/sessions/</text>
+      <text x="410" y="172">✓ 이미지 생성 / Reasoning 모드</text>
+      <text x="410" y="192">✓ VS Code IDE 통합</text>
+    </g>
+  </g>
+
+  <!-- Connection to vault -->
+  <g stroke="#5a5140" stroke-width="1.2" fill="none" stroke-opacity="0.6">
+    <path d="M 195,200 Q 195,260 380,290" marker-end="url(#arrA)"/>
+    <path d="M 565,200 Q 565,260 380,290" marker-end="url(#arrA)"/>
+  </g>
+
+  <!-- Vault circle (center bottom) -->
+  <g>
+    <circle cx="380" cy="320" r="48" fill="#2a2418"/>
+    <text x="380" y="318" text-anchor="middle" font-family="Playfair Display, serif" font-size="20" font-weight="800" fill="#d88a3a">vault</text>
+    <text x="380" y="335" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#f4f1e8" opacity="0.7">wiki/*.md</text>
+  </g>
+
+  <!-- Side labels: CLI vs Desktop -->
+  <g font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" letter-spacing="1.5">
+    <rect x="20" y="220" width="170" height="32" rx="6" fill="#fff8ed" stroke="#d88a3a"/>
+    <text x="105" y="241" text-anchor="middle" fill="#d88a3a">CLI · 풀 기능</text>
+    <rect x="200" y="220" width="170" height="32" rx="6" fill="color-mix(in srgb, #2d7d6e 6%, #fff)" stroke="#2d7d6e"/>
+    <text x="285" y="241" text-anchor="middle" fill="#2d7d6e">Desktop · MCP 연결</text>
+  </g>
+  <g font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" letter-spacing="1.5">
+    <rect x="390" y="220" width="170" height="32" rx="6" fill="#fff8ed" stroke="#d88a3a"/>
+    <text x="475" y="241" text-anchor="middle" fill="#d88a3a">CLI · 세션 archive</text>
+    <rect x="570" y="220" width="170" height="32" rx="6" fill="color-mix(in srgb, #2d7d6e 6%, #fff)" stroke="#2d7d6e"/>
+    <text x="655" y="241" text-anchor="middle" fill="#2d7d6e">VS Code 통합</text>
+  </g>
+
+  <!-- bottom: rule of thumb -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12.5" fill="#2a2418">
+    <rect x="20" y="384" width="720" height="28" rx="8" fill="#f6f3ea" stroke="#5a5140" stroke-dasharray="3 3"/>
+    <text x="40" y="402" font-weight="700" fill="#5a5140">규칙:</text>
+    <text x="80" y="402" fill="#5a5140">vault 작업·자동화 hook = <tspan fill="#2d7d6e" font-weight="700">Claude Code CLI</tspan> · 빠른 챗 = <tspan fill="#2d7d6e" font-weight="700">Claude Desktop</tspan> · 코드 백업 = <tspan fill="#d88a3a" font-weight="700">Codex</tspan></text>
+  </g>
+
+  <defs>
+    <marker id="arrA" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#5a5140"/></marker>
+  </defs>
+</svg>
+<figcaption>두 agent 모두 같은 vault를 본다 — 다만 컨트롤 방법과 강점이 다름.</figcaption>
+</figure>
+</p>
+<h3 id="두-agent-두-역할">두 agent, 두 역할</h3>
+<p><strong>Claude Code</strong> (Anthropic) — <em>주(主) engineering agent</em>
+- vault에 깊게 통합됨 (Stop hook으로 세션 자동 기록, 슬래시 커맨드 <code>/slides</code> <code>/recall</code> 사용 가능)
+- 긴 컨텍스트 (200K-1M 토큰) — vault 전체를 컨텍스트로 끌어올 수 있음
+- 강점: 다단계 reasoning, 신중한 파일 수정, vault navigation, 컨벤션 따르기
+- 어디서: vault의 모든 파일 직접 읽고 쓰기 (frontmatter 추가, entity 생성, ontology rebuild 트리거)</p>
+<p><strong>Codex</strong> (OpenAI) — <em>보조 engineering agent</em>
+- 세션 저장소가 <code>~/.codex/sessions/</code> (rollout JSONL 형식). Stop hook은 없음 — 세션 끝나면 <code>pwsh codex_digest.ps1</code> 수동 실행
+- 강점: 빠른 코드 생성 / 이미지 생성 / Reasoning 모델로 어려운 문제 풀기
+- 어디서: 코드 새로 짤 때, Claude가 막힐 때 cross-check, 빠른 prototype</p>
+<h3 id="어느-쪽을-언제-쓸까">어느 쪽을 언제 쓸까</h3>
+<table>
+<thead>
+<tr>
+<th>상황</th>
+<th>추천</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>vault 페이지 작성/수정</strong> (entity 추가, frontmatter 정리)</td>
+<td><strong>Claude Code CLI</strong> — Stop hook이 자동 기록</td>
+</tr>
+<tr>
+<td><strong>새 스크립트 짜기</strong> (Python/PowerShell)</td>
+<td>둘 다 가능. Codex가 reasoning 모드에서 더 빠를 때 있음</td>
+</tr>
+<tr>
+<td><strong>여러 파일 리팩터링</strong></td>
+<td><strong>Claude Code</strong> — 다단계 수정 안정적</td>
+</tr>
+<tr>
+<td><strong>막힐 때 두 번째 의견</strong></td>
+<td>같은 질문을 두 agent에 던지고 비교</td>
+</tr>
+<tr>
+<td><strong>이미지 / mockup 생성</strong></td>
+<td><strong>Codex</strong> — image_generation 도구 보유</td>
+</tr>
+<tr>
+<td><strong>빠른 챗 / "이게 뭐지?"</strong></td>
+<td><strong>Claude Desktop app</strong> (GUI, MCP 연결)</td>
+</tr>
+<tr>
+<td><strong>세션 디제스트 자동 기록</strong></td>
+<td><strong>Claude Code</strong> (자동) — Codex는 수동</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cli-컨트롤-가장-중요한-5가지">CLI 컨트롤 — 가장 중요한 5가지</h3>
+<p><strong>(1) 어디서 실행하면 컨텍스트가 자동 잡히는가</strong></p>
+<pre><code class="language-powershell">cd C:\Users\&lt;you&gt;\ObsidianVault   # vault 안에서 실행
+claude                              # Claude Code CLI 시작
+# 또는
+codex                               # Codex CLI 시작
+</code></pre>
+<p>두 agent 모두 <em>현재 디렉토리부터 부모 폴더로 거슬러 올라가며</em> 다음을 자동 로드:
+- Claude Code: <code>CLAUDE.md</code> (vault 안 + 사용자 홈 둘 다 인식)
+- Codex: <code>AGENTS.md</code> (관례) + 사용자 홈 <code>~/.codex/AGENTS.md</code></p>
+<p><strong>즉</strong>: vault 안에서 켜면 가이드가 자동 로드되어 <em>"내 프로젝트 X 알려줘"</em> 한 줄로 답이 나옵니다.</p>
+<p><strong>(2) Hook 등록 — Claude Code 전용 (Codex는 미지원)</strong></p>
+<p><code>~\.claude\settings.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;matcher&quot;: &quot;*&quot;,
+        &quot;hooks&quot;: [{
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;powershell.exe -File &lt;vault&gt;\\scripts\\save_session.ps1 -Source claude&quot;
+        }]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>지원하는 이벤트: <code>Stop</code> (세션 종료), <code>SessionStart</code>, <code>PostToolUse</code>, <code>PreToolUse</code>, <code>UserPromptSubmit</code> 등. 우리는 <code>Stop</code>만 씀.</p>
+<p><strong>(3) Slash Commands — Claude Code 전용</strong></p>
+<p><code>~\.claude\commands\&lt;name&gt;.md</code> 파일을 만들면 <code>/&lt;name&gt; &lt;args&gt;</code> 로 호출 가능. 예: <code>/slides ProjectA</code> → <code>slides.md</code> 의 prompt 실행.</p>
+<p><strong>(4) Memory — Claude Code 자동 컨텍스트</strong></p>
+<p><code>~\.claude\projects\&lt;machine&gt;\memory\MEMORY.md</code> 가 모든 세션 시작 시 자동 컨텍스트로 주입됨. 이 파일에 <em>"~~ 이 프로젝트의 메서드 기억해 둬"</em> 식으로 적어두면 다음 세션부터 자동 인식.</p>
+<p><strong>(5) Codex 세션 후 디제스트 — 3가지 방법</strong></p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **정정**:Codex CLI에는 Claude Code 같은 *이벤트 hook* (Stop/SessionStart 등)이 **없습니다**. 다만 Codex는 다른 종류의 자동화 — *스케줄 기반 cron* — 을 지원합니다 (`~/.codex/automations/`). 같은 효과를 3가지 방법으로 만들 수 있음:</div>
+
+<p><strong>방법 A — 수동 (가장 간단)</strong>:</p>
+<pre><code class="language-powershell"># Codex 세션 끝난 직후
+pwsh C:\Users\&lt;you&gt;\ObsidianVault\scripts\codex_digest.ps1
+</code></pre>
+<p><strong>방법 B — 셸 wrapper로 "자동 Stop hook 흉내"</strong>:</p>
+<p>PowerShell <code>$PROFILE</code>에 함수 추가:</p>
+<pre><code class="language-powershell">function cdx {
+  codex @args
+  pwsh &quot;$env:USERPROFILE\ObsidianVault\scripts\codex_digest.ps1&quot;
+}
+</code></pre>
+<p>이제 <code>codex</code> 대신 <code>cdx</code> 쓰면 — 세션 종료시 자동으로 디제스트 실행됨. Bash/zsh도 동일 (<code>alias</code> 또는 <code>function</code>).</p>
+<p><strong>방법 C — Codex automation으로 주기적 자동 디제스트</strong>:</p>
+<p>Codex의 RRULE-기반 cron 시스템 사용. <code>~/.codex/automations/vault-digest/automation.toml</code>:</p>
+<pre><code class="language-toml">version = 1
+id = &quot;vault-digest&quot;
+kind = &quot;cron&quot;
+name = &quot;Vault session digest&quot;
+prompt = &quot;Run the latest Codex rollout through the vault digest pipeline by executing: pwsh C:\\Users\\&lt;you&gt;\\ObsidianVault\\scripts\\codex_digest.ps1&quot;
+status = &quot;ACTIVE&quot;
+rrule = &quot;FREQ=HOURLY;INTERVAL=2&quot;
+model = &quot;gpt-5.4&quot;
+reasoning_effort = &quot;low&quot;
+execution_environment = &quot;worktree&quot;
+</code></pre>
+<p>→ Codex가 매 2시간마다 자동으로 최신 세션을 디제스트. <strong>단점</strong>: Codex 자체가 실행되어야 (Codex Cloud 또는 desktop 켜져있어야).</p>
+<p>→ 최근 <code>~/.codex/sessions/</code> 또는 <code>archived_sessions/</code> 의 JSONL을 자동 찾아 LLM 요약 후 vault <code>wiki/sources/Sessions &lt;date&gt;.md</code> 에 추가.</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **결론**:*진짜* 이벤트-즉시 자동 기록 = Claude Code Stop hook이 유일. *유사 효과*는 Codex에서 wrapper (방법 B) 또는 automation (방법 C) 로 가능. 둘 다 같은 vault 같은 entity 페이지를 본다는 점이 핵심이라 95% 상호교체 가능.</div>
+
+<h3 id="desktop-앱과의-차이">Desktop 앱과의 차이</h3>
+<p><strong>Claude Desktop</strong> (Claude.ai 데스크탑 앱):
+- Hook 시스템 <strong>없음</strong> — Stop 훅이 안 걸림
+- MCP (Model Context Protocol) 서버 <strong>있음</strong> — <code>obsidian-vault</code> MCP를 연결하면 vault에 직접 read/write 가능
+- 슬래시 커맨드 <strong>없음</strong> (CLI만)
+- 메모리는 동일 backend라 작동
+- 권장 사용: <em>"vault 콘텐츠로 대화하고 싶을 때"</em> — 빠른 질의·브레인스토밍</p>
+<p><strong>Codex Desktop</strong> (VS Code 안 또는 standalone):
+- Hook 시스템 <strong>없음</strong>
+- 자동 세션 archive는 동일하게 <code>~/.codex/archived_sessions/</code> 에 저장됨
+- VS Code 안에서는 IDE 통합 (파일 트리 / diff / git) 가시적
+- 권장 사용: <em>"코드 짜면서 IDE 안에서 바로"</em> — 코드 작업</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **결론**:본격 vault 작업 (entity 페이지 작성, 자동화 hook, 슬래시 커맨드 사용) = **Claude Code CLI**. 빠른 채팅 / vault 콘텐츠 대화 = **Claude Desktop + MCP**. 코드 생성 backup = **Codex** (CLI 또는 Desktop). 셋 다 같은 vault를 본다는 점이 핵심.</div>
+
+<h3 id="mcp-연결-claude-desktop만-선택">MCP 연결 (Claude Desktop만 — 선택)</h3>
+<p>vault를 Claude Desktop에 연결하면 desktop 앱이 vault에 직접 read/write 가능:</p>
+<ol>
+<li>Claude Desktop 설치</li>
+<li><code>claude_desktop_config.json</code> 편집:</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;obsidian-vault&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-filesystem&quot;,
+               &quot;C:\\Users\\&lt;you&gt;\\ObsidianVault&quot;]
+    }
+  }
+}
+</code></pre>
+<ol start="3">
+<li>Claude Desktop 재시작 → "🔌" 아이콘에 obsidian-vault 보이면 성공</li>
+</ol>
+<p><strong>이러면</strong>: Claude Desktop에서 <em>"내 vault에서 Project A 페이지 보여줘"</em> 하면 직접 파일을 읽어 답합니다. Hook은 여전히 없지만 vault navigation은 가능.</p>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **Hook이 필요한 자동화는 무조건 CLI**. Desktop 앱은 채팅 / vault 탐색 보조 도구로만.</div>
+
+<hr />
+<h2 id="1-핵심-개념-3층짜리-두-번째-뇌">1. 핵심 개념 — 3층짜리 두 번째 뇌</h2>
+<p>복잡해 보일 수 있는데, 이 시스템은 사실 <em>세 층의 노트 저장소</em>에 자동화 한 겹을 씌운 것뿐입니다:</p>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three-layer mental model">
+  <!-- layer 1: project knowledge -->
+  <g>
+    <rect x="60" y="20" width="640" height="70" rx="8" fill="#2d7d6e" opacity="0.08" stroke="#2d7d6e" stroke-width="1.5"/>
+    <text x="80" y="44" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">1층 · 프로젝트 지식</text>
+    <text x="80" y="62" font-family="Inter, sans" font-size="11.5" fill="#5a5140">본인이 직접 쓰는 노트. 영구 자산.</text>
+    <g font-family="JetBrains Mono, monospace" font-size="10" fill="#2a2418">
+      <rect x="320" y="48" width="110" height="26" rx="4" fill="#fff" stroke="#2d7d6e"/>
+      <text x="330" y="65">wiki/entities/</text>
+      <rect x="440" y="48" width="110" height="26" rx="4" fill="#fff" stroke="#2d7d6e"/>
+      <text x="450" y="65">wiki/concepts/</text>
+      <rect x="560" y="48" width="120" height="26" rx="4" fill="#fff" stroke="#2d7d6e"/>
+      <text x="570" y="65">wiki/sources/</text>
+    </g>
+  </g>
+  <!-- layer 2: activity -->
+  <g>
+    <rect x="60" y="105" width="640" height="70" rx="8" fill="#d88a3a" opacity="0.1" stroke="#d88a3a" stroke-width="1.5"/>
+    <text x="80" y="129" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">2층 · 활동 로그 (자동)</text>
+    <text x="80" y="147" font-family="Inter, sans" font-size="11.5" fill="#5a5140">매 2시간 컴퓨터가 채움. "지난주 뭐 했더라"용.</text>
+    <g font-family="JetBrains Mono, monospace" font-size="10" fill="#2a2418">
+      <rect x="320" y="133" width="110" height="26" rx="4" fill="#fff" stroke="#d88a3a"/>
+      <text x="330" y="150">activity/...</text>
+      <rect x="440" y="133" width="110" height="26" rx="4" fill="#fff" stroke="#d88a3a"/>
+      <text x="450" y="150">situation/...</text>
+      <rect x="560" y="133" width="120" height="26" rx="4" fill="#fff" stroke="#d88a3a"/>
+      <text x="570" y="150">Sessions/...</text>
+    </g>
+  </g>
+  <!-- layer 3: memory -->
+  <g>
+    <rect x="60" y="190" width="640" height="70" rx="8" fill="#9b7eb7" opacity="0.1" stroke="#9b7eb7" stroke-width="1.5"/>
+    <text x="80" y="214" font-family="Playfair Display, serif" font-weight="700" font-size="17" fill="#2a2418">3층 · AI 메모리</text>
+    <text x="80" y="232" font-family="Inter, sans" font-size="11.5" fill="#5a5140">새 세션 시작할 때 Claude가 자동 로드. 매번 재설명 X.</text>
+    <g font-family="JetBrains Mono, monospace" font-size="9.5" fill="#2a2418">
+      <rect x="320" y="218" width="360" height="26" rx="4" fill="#fff" stroke="#9b7eb7"/>
+      <text x="330" y="235">~/.claude/projects/&lt;machine&gt;/memory/MEMORY.md</text>
+    </g>
+  </g>
+  <!-- left labels -->
+  <g font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="#8a7f68" letter-spacing="1.5">
+    <text x="22" y="56" transform="rotate(-90 22 56)">손으로 씀</text>
+    <text x="22" y="142" transform="rotate(-90 22 142)">자동</text>
+    <text x="22" y="228" transform="rotate(-90 22 228)">AI 읽음</text>
+  </g>
+</svg>
+<figcaption>3층 구조 — 1층은 본인이 쓰고, 2층은 자동, 3층은 AI가 읽음.</figcaption>
+</figure>
+</p>
+<p><strong>1층 — 프로젝트 지식 (<code>wiki/entities/</code>, <code>wiki/concepts/</code>)</strong>: 본인이 직접 쓰는 노트. 각 프로젝트, 학생, 메서드, 그랜트가 한 페이지씩. 이건 본인이 <em>영구히</em> 갖고 갈 자산입니다.</p>
+<p><strong>2층 — 활동 로그 (<code>wiki/activity/</code>, <code>wiki/situation/</code>, <code>wiki/sources/Sessions YYYY-MM-DD.md</code>)</strong>: 자동 생성되는 일별 스냅샷. <em>"지난주에 뭐 했더라"</em>에 답하는 용도. 컴퓨터가 알아서 채웁니다.</p>
+<p><strong>3층 — AI 메모리 (<code>~/.claude/projects/&lt;machine&gt;/memory/</code>)</strong>: Claude Code가 새 세션 시작할 때 자동으로 읽는 작은 파일들. 본인의 프로젝트·취향·관계를 매번 다시 설명하지 않아도 되게 해줍니다.</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **외워둘 한 줄**:*내가 쓴다 (1층) → 컴퓨터가 매 2시간 갱신한다 (2층) → AI가 다음 세션에서 자동으로 읽는다 (3층).*</div>
+
+<hr />
+<h2 id="2-자동화-흐름-매-2시간-어떤-일이-일어나는가">2. 자동화 흐름 — "매 2시간 어떤 일이 일어나는가"</h2>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tracker flow every 2 hours">
+  <!-- inputs -->
+  <g font-family="Inter, sans" font-size="11.5" fill="#2a2418">
+    <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">INPUTS</text>
+    <rect x="20" y="35"  width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="53">📝 새/수정된 노트</text>
+    <rect x="20" y="71"  width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="89">⌨ Git 커밋</text>
+    <rect x="20" y="107" width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="125">⚡ GitHub PR/이슈</text>
+    <rect x="20" y="143" width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="161">📅 캘린더</text>
+    <rect x="20" y="179" width="140" height="28" rx="6" fill="#fff" stroke="#2d7d6e" stroke-width="1.2"/><text x="34" y="197">📋 sticky notes</text>
+  </g>
+  <!-- arrows in -->
+  <g stroke="#5a5140" stroke-width="1" fill="none" marker-end="url(#arr2)" stroke-opacity="0.6">
+    <line x1="160" y1="49"  x2="288" y2="118"/>
+    <line x1="160" y1="85"  x2="288" y2="125"/>
+    <line x1="160" y1="121" x2="288" y2="130"/>
+    <line x1="160" y1="157" x2="288" y2="135"/>
+    <line x1="160" y1="193" x2="288" y2="142"/>
+  </g>
+
+  <!-- tracker box -->
+  <g>
+    <rect x="288" y="80" width="184" height="104" rx="10" fill="#2a2418"/>
+    <text x="380" y="108" font-family="Playfair Display, serif" font-weight="800" font-size="18" fill="#d88a3a" text-anchor="middle">tracker.ps1</text>
+    <text x="380" y="128" font-family="JetBrains Mono, monospace" font-size="11" fill="#f4f1e8" text-anchor="middle">매 2시간</text>
+    <text x="380" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#c2b89f" text-anchor="middle">00:00, 02:00, ..., 22:00</text>
+    <circle cx="380" cy="166" r="9" fill="#c4593f"/>
+    <text x="380" y="170" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">12×</text>
+  </g>
+
+  <!-- arrows out -->
+  <g stroke="#d88a3a" stroke-width="1" fill="none" marker-end="url(#arr3)" stroke-opacity="0.7">
+    <line x1="472" y1="100" x2="598" y2="50"/>
+    <line x1="472" y1="118" x2="598" y2="86"/>
+    <line x1="472" y1="132" x2="598" y2="121"/>
+    <line x1="472" y1="146" x2="598" y2="157"/>
+    <line x1="472" y1="160" x2="598" y2="193"/>
+  </g>
+  <!-- outputs -->
+  <g font-family="Inter, sans" font-size="11.5" fill="#2a2418">
+    <text x="600" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">OUTPUTS</text>
+    <rect x="600" y="35"  width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="53">Today.md 갱신</text>
+    <rect x="600" y="71"  width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="89">_ontology.json</text>
+    <rect x="600" y="107" width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="125">activity/&lt;date&gt;</text>
+    <rect x="600" y="143" width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="161">situation/&lt;date&gt;</text>
+    <rect x="600" y="179" width="150" height="28" rx="6" fill="#fff" stroke="#d88a3a" stroke-width="1.2"/><text x="614" y="197">graph.html</text>
+  </g>
+
+  <!-- bottom note -->
+  <g font-family="JetBrains Mono, monospace" font-size="11" fill="#5a5140">
+    <text x="380" y="232" text-anchor="middle">LLM 호출 = 새 노트 변화 판단 시에만 · 약 $0.02-0.05/일</text>
+    <text x="380" y="250" text-anchor="middle" fill="#8a7f68">나머지는 모두 평범한 PowerShell + Python 처리</text>
+  </g>
+
+  <defs>
+    <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#5a5140"/></marker>
+    <marker id="arr3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#d88a3a"/></marker>
+  </defs>
+</svg>
+<figcaption>매 2시간 자동 흐름 — 입력 5개를 트래커 한 곳이 받아 산출물 5개로 변환.</figcaption>
+</figure>
+</p>
+<p><strong>Windows 예약 작업</strong> (또는 macOS launchd, Linux cron)이 매 2시간 (<code>00:00, 02:00, 04:00, ..., 22:00</code>)에 한 번씩 작은 PowerShell 스크립트를 돌립니다. 이 스크립트가:</p>
+<ol>
+<li>새로 추가된 파일 / 수정된 파일을 스캔</li>
+<li>Git 커밋, GitHub 활동, Outlook 캘린더 등 곁가지 신호 수집</li>
+<li>본인의 vault에서 노트 변경사항을 LLM에 보내 <em>"뭐가 바뀌었는지"</em> 판단 (e.g., 새 마감일 발견 → entity 페이지에 자동 추가)</li>
+<li><strong>온톨로지 그래프 재구축</strong> — vault 전체를 스캔해서 <em>"누가 어떤 프로젝트의 PI고, 어떤 메서드를 쓰는지"</em> JSON 그래프로 export</li>
+<li>결과를 <code>Today.md</code>에 모아서 본인이 다음에 vault를 열 때 한눈에 보이게</li>
+</ol>
+<p>비용: 한 번에 ~$0.001-0.005 (LLM이 새 변화를 판단할 때만). 하루 12회 = 약 <strong>$0.02-0.05/일</strong> = 한 달 1-2달러.</p>
+<hr />
+<h2 id="3-시작하기-전에-필요한-것">3. 시작하기 전에 필요한 것</h2>
+<p>
+<figure class="diagram diagram-checklist">
+<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+  <g font-family="Inter, sans" font-size="12" fill="#0a1f3d">
+    <text x="20" y="22" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="2" opacity="0.55">PHASE 1 · DAYS 1-3</text>
+    <rect x="20" y="35"  width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="56">☐ Obsidian (vault UI)</text>
+    <text x="240" y="56" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="20" y="73"  width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="94">☐ Claude Code (AI agent)</text>
+    <text x="240" y="94" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">subscription</text>
+    <rect x="20" y="111" width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="132">☐ Python 3.11+</text>
+    <text x="240" y="132" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="20" y="149" width="320" height="32" fill="#fff" stroke="#0a1f3d"/>
+    <text x="34" y="170">☐ 기본 터미널 사용 능력</text>
+
+    <text x="380" y="22" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="2" opacity="0.55">PHASE 2 · DAYS 4-7</text>
+    <rect x="380" y="35" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="56">☐ OpenRouter API key</text>
+    <text x="600" y="56" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">$5 충전</text>
+    <rect x="380" y="73" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="94">☐ gh CLI (선택)</text>
+    <text x="600" y="94" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="380" y="111" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="132">☐ pdfplumber, python-docx (pip)</text>
+    <text x="600" y="132" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55">free</text>
+    <rect x="380" y="149" width="320" height="32" fill="#fff" stroke="#b5392a"/>
+    <text x="394" y="170">☐ Windows 예약 작업 권한</text>
+  </g>
+</svg>
+<figcaption>처음 3일은 free 도구만, 4일째부터 LLM key (한 달 1-2달러).</figcaption>
+</figure>
+</p>
+<p>7일 동안 차근차근 갖춰갈 것이라 처음부터 다 있을 필요 없습니다. <strong>Day 1 시작 시점에 필요한 것만</strong>:</p>
+<ul>
+<li>[ ] <strong>Obsidian 설치</strong> (<a href="https://obsidian.md">obsidian.md</a>, 무료) — 본인의 vault UI</li>
+<li>[ ] <strong>Claude Code 설치 및 로그인</strong> (<a href="https://claude.com/claude-code">claude.com/claude-code</a>) — AI agent</li>
+<li>[ ] <strong>Python 3.11 이상</strong> (스크립트 돌리는 용도)</li>
+<li>[ ] 기본 터미널 사용 능력 (cd, ls 정도)</li>
+</ul>
+<p><strong>Day 4 이후 필요</strong>:
+- [ ] <strong>OpenRouter API key</strong> (<a href="https://openrouter.ai">openrouter.ai</a>, $5 충전이면 몇 달 씀) — LLM 판단 호출용
+- [ ] <strong><code>gh</code> CLI</strong> (<a href="https://cli.github.com">cli.github.com</a>) — GitHub 활동 수집 (선택)</p>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **이 가이드는 Windows 기준**이지만, macOS / Linux도 path 약간만 바꾸면 동일합니다. PowerShell이 Bash로 바뀌는 정도.</div>
+
+<hr />
+<h2 id="day-1-vault-만들기">Day 1 — Vault 만들기</h2>
+<p><strong>오늘의 목표</strong>: Obsidian으로 빈 vault를 만들고, 본인의 가장 활발한 프로젝트 하나에 대한 entity 페이지를 손으로 작성합니다. 자동화는 아직 없습니다.</p>
+<h3 id="단계-11-vault-생성">단계 1.1 — Vault 생성</h3>
+<p>Obsidian 실행 → "Create new vault" → 이름은 <code>ResearchVault</code>, 위치는 <code>C:\Users\&lt;you&gt;\ObsidianVault\</code> (이 경로를 가이드에서 계속 사용합니다).</p>
+<h3 id="단계-12-폴더-구조">단계 1.2 — 폴더 구조</h3>
+<p>vault 안에 직접 다음 빈 폴더를 만들어주세요 (Obsidian 좌측 패널에서 우클릭 → New folder):</p>
+<pre><code>ObsidianVault/
+└── wiki/
+    ├── entities/        ← 프로젝트 / 사람 / 그랜트 한 페이지씩
+    ├── concepts/        ← 메서드 / 이론 한 페이지씩
+    ├── sources/         ← 원본 문서 / 디제스트 / 세션 로그
+    └── (activity/, situation/는 나중에 자동 생성됨)
+</code></pre>
+<h3 id="단계-13-첫-entity-페이지">단계 1.3 — 첫 entity 페이지</h3>
+<p>가장 활발한 프로젝트 하나만 선택하세요. 아래 예시는 가상의 <em>Project A</em>를 사용 — 본인 프로젝트 이름으로 바꿔 쓰시면 됩니다. <code>wiki/entities/Project A.md</code> 새 파일 생성:</p>
+<pre><code class="language-markdown">---
+type: project
+title: &quot;Project A&quot;
+status: active
+tier: 2
+deadline: 2026-08-15
+related:
+  - &quot;&lt;span class=&quot;wikilink&quot;&gt;&amp;lt;나의 이름&amp;gt;&lt;/span&gt;&quot;
+  - &quot;&lt;span class=&quot;wikilink&quot;&gt;Method A&lt;/span&gt;&quot;
+---
+
+# Project A
+
+(한 문장 프로젝트 설명 — 무엇을 만드는 시스템 / 연구인지.)
+
+- **PI**: &lt;span class=&quot;wikilink&quot;&gt;&amp;lt;나의 이름&amp;gt;&lt;/span&gt;
+- **Methods**: &lt;span class=&quot;wikilink&quot;&gt;Method A&lt;/span&gt;, &lt;span class=&quot;wikilink&quot;&gt;Method B&lt;/span&gt;
+- **Status**: 파일럿 N명 진행 중, 외부 그랜트 X 신청 단계.
+
+## 현재 이슈
+- 핵심 컴포넌트의 정확도 X% — 검증 강화 필요.
+</code></pre>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Frontmatter 해부**:위쪽 `---`로 둘러싸인 영역이 바로 frontmatter. 컴퓨터가 읽는 *라벨*들이라 사람이 본문에 쓰는 자유 텍스트와 분리됩니다.
+> - `type: project` — Day 5에서 ontology 스크립트가 *"이 페이지는 프로젝트구나"* 알아차리는 핵심 키. **반드시 있어야 함**.
+> - `status: active` / `tier: 2` — Today.md가 자동 수집해서 우선순위 표 만들어줌.
+> - `deadline: 2026-08-15` — Today.md § 2가 자동으로 D-counter 계산.
+> - `related: [...]` — 관련 페이지 wikilink 리스트. ontology가 `relatedTo` 관계로 변환.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Wikilink 동작**:본문의 `<span class="wikilink">Method A</span>` 는 *"Method A라는 페이지로 가는 링크"*. 옵시디언이 자동으로:
+> - 클릭 가능한 링크로 렌더
+> - 그 페이지가 아직 없어도 stub으로 추적 (Day 5 ontology에서 자동 노드 생성)
+> - 그래프 뷰(Ctrl+G)에 엣지로 표시</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **위키링크 `<span class="wikilink">...</span>`**:Obsidian 안에서 다른 페이지 링크. 아직 그 페이지가 없어도 괜찮음 — 자동 stub으로 추적됨.</div>
+
+<h3 id="단계-14-같은-방식으로-1-2개-더">단계 1.4 — 같은 방식으로 1-2개 더</h3>
+<p>본인의 advisee 한 명, 자주 쓰는 메서드 하나, 진행 중인 그랜트 하나 정도 추가하세요. <em>최소 3-4개의 entity</em>가 있어야 다음 단계 자동화가 의미 있는 그래프를 만듭니다.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 1 체크**:Obsidian 좌측 사이드바의 그래프 뷰 (Ctrl+G) 누르면 본인의 노드들이 작은 별자리로 보여야 합니다.</div>
+
+<hr />
+<h2 id="day-2-todaymd-단일-진입점">Day 2 — Today.md (단일 진입점)</h2>
+<p><strong>오늘의 목표</strong>: 매일 / 매 세션 시작할 때 무조건 여기부터 읽는 <em>한 페이지</em>를 만듭니다. 이게 시스템의 심장입니다.</p>
+<h3 id="단계-21-codewikitodaymdcode-생성">단계 2.1 — <code>wiki/Today.md</code> 생성</h3>
+<p>다음 템플릿을 복사하세요. 섹션은 그대로 두고, 본인 프로젝트로 채우면 됩니다:</p>
+<pre><code class="language-markdown">---
+type: meta
+title: &quot;Today — 단일 진입점&quot;
+---
+
+# Today — 단일 진입점
+
+&gt; **첫 진입은 무조건 이 페이지.** 매 세션 시작할 때 여기를 먼저 읽고 필요한 곳으로 이동하세요.
+
+## 1. 어디서 무엇을 물어볼지
+
+| 묻고 싶은 것 | 어디로 |
+|---|---|
+| **&quot;내 프로젝트 X의 디자인/이론/방법론&quot;** | `wiki/entities/&lt;X&gt;.md` |
+| **&quot;누가 누구의 advisee인지, 내가 PI인 그랜트&quot;** | &lt;span class=&quot;wikilink&quot;&gt;&amp;lt;나의 이름&amp;gt;&lt;/span&gt; |
+| **&quot;방법론 (BKT, MAS 등)&quot;** | `wiki/concepts/` |
+| **&quot;오늘 뭐 해야 하지&quot;** | 이 페이지 § 2-3 |
+
+## 2. 활성 마감
+
+| 마감 | 항목 | D- |
+|---|---|---|
+| YYYY-MM-DD | &lt;span class=&quot;wikilink&quot;&gt;그랜트 이름&lt;/span&gt; 제출 | D-XX |
+
+## 3. 활성 프로젝트 우선순위
+
+### Tier 1 — 마감/제출 직전
+- &lt;span class=&quot;wikilink&quot;&gt;프로젝트 A&lt;/span&gt; — 한 줄 상황
+
+### Tier 2 — 능동 개발
+- &lt;span class=&quot;wikilink&quot;&gt;프로젝트 B&lt;/span&gt; — 한 줄 상황
+
+### Tier 3 — 백로그
+- &lt;span class=&quot;wikilink&quot;&gt;프로젝트 C&lt;/span&gt;
+
+## 4. 최근 활동 (자동 갱신)
+&lt;!-- BEGIN AUTO RECENT --&gt;
+(Day 4에 자동 채워짐)
+&lt;!-- END AUTO RECENT --&gt;
+
+## 5. 빠른 명령
+(Day 4-7에 추가됨)
+</code></pre>
+<h3 id="단계-22-본인-데이터로-채우기">단계 2.2 — 본인 데이터로 채우기</h3>
+<p>§ 2 (마감), § 3 (Tier 1-3 프로젝트) 만 본인 데이터로 채워주세요. 나머지는 자동화가 채울 자리입니다.</p>
+<h3 id="단계-23-obsidian-즐겨찾기">단계 2.3 — Obsidian 즐겨찾기</h3>
+<p>Obsidian에서 <code>Today.md</code> 우클릭 → "Pin" — 늘 상단 탭에 떠있게.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 2 체크**:매일 아침 Obsidian 열고 가장 먼저 보는 페이지가 `Today.md`가 되어야 합니다. 그 위치만 잡혔으면 성공.</div>
+
+<hr />
+<h2 id="day-3-claude-code-연결-첫-세션-자동-기록">Day 3 — Claude Code 연결 + 첫 세션 자동 기록</h2>
+<p><strong>오늘의 목표</strong>: Claude Code가 vault를 <em>알게</em> 하고, 세션이 끝날 때마다 자동으로 노트를 남기게 합니다.</p>
+<h3 id="단계-31-user-level-claudemd">단계 3.1 — User-level CLAUDE.md</h3>
+<p><code>C:\Users\&lt;you&gt;\CLAUDE.md</code> 파일을 생성하세요. (vault 안이 아니라 사용자 홈 폴더!) Claude Code는 어떤 폴더에서 켜도 <em>부모 폴더 위로</em> 올라가며 <code>CLAUDE.md</code>를 자동으로 읽습니다.</p>
+<pre><code class="language-markdown"># User-level Claude Code instructions
+
+## 매 세션 시작 시
+1. 먼저 `C:\Users\&lt;you&gt;\ObsidianVault\wiki\Today.md` 를 읽으세요.
+2. 자동 메모리(`~\.claude\projects\&lt;machine&gt;\memory\MEMORY.md`)는 시스템이 자동으로 컨텍스트에 주입함.
+3. 새로 추론하기보다 기존 vault 콘텐츠를 먼저 인용하세요.
+
+## 지식 위치
+| 질문 종류 | 어디서 답을 찾는가 |
+|---|---|
+| 프로젝트 디자인 / 메서드 / 상태 | `wiki/entities/&lt;프로젝트&gt;.md` |
+| 메서드론 / 이론 | `wiki/concepts/` |
+| 최근 활동 | `wiki/activity/&lt;날짜&gt;.md` |
+
+## 사용자 스타일
+- 한국어 응답 OK (사용자 한국인).
+- 짧고 직접적으로. 자기 요약 반복 X.
+</code></pre>
+<h3 id="단계-32-세션-자동-기록-hook-등록">단계 3.2 — 세션 자동 기록 hook 등록</h3>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **Hook이란?** Claude Code에는 *"특정 이벤트가 일어나는 순간"* 사용자가 지정한 명령을 자동 실행하는 시스템이 있습니다. 우리가 쓸 건 **`Stop`** hook — Claude 세션이 끝나는 순간에 발동. 마치 *"세션이 끝나면 자동으로 노트를 남기게 도어벨을 단다"*고 생각하면 됩니다.
+>
+> Hook이 받는 정보: stdin으로 JSON 형식의 세션 메타데이터(session_id, transcript_path 등) 한 덩어리. 우리 스크립트는 이걸 받아서 `wiki/log.md`에 한 줄 추가합니다.</div>
+
+<p><code>~\.claude\settings.json</code> 열어서 (없으면 생성) 다음 추가:</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;matcher&quot;: &quot;*&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;powershell.exe -NoProfile -ExecutionPolicy Bypass -File \&quot;C:\\Users\\&lt;you&gt;\\ObsidianVault\\scripts\\save_session.ps1\&quot; -Source claude&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<h3 id="단계-33-간단한-save-sessionps1">단계 3.3 — 간단한 save_session.ps1</h3>
+<p>vault 안에 <code>scripts/</code> 폴더를 만들고 <code>save_session.ps1</code>을 다음과 같이 작성:</p>
+<pre><code class="language-powershell">$VaultRoot = 'C:\Users\&lt;you&gt;\ObsidianVault'
+$LogFile   = Join-Path $VaultRoot 'wiki\log.md'
+
+# Stop hook이 stdin으로 JSON을 보내옴
+$stdin = [Console]::In.ReadToEnd()
+$session = if ($stdin) { $stdin | ConvertFrom-Json } else { @{} }
+$sid = if ($session.session_id) { $session.session_id.Substring(0, 8) } else { '--------' }
+
+$stamp = (Get-Date).ToString('yyyy-MM-dd HH:mm')
+$line  = &quot;- $stamp [claude $sid] session ended&quot;
+
+if (-not (Test-Path $LogFile)) { New-Item $LogFile -ItemType File -Force | Out-Null }
+Add-Content -Path $LogFile -Value $line -Encoding UTF8
+</code></pre>
+<p>이 단계는 <em>최소 버전</em>입니다. 한 줄짜리 로그만 남기지만, hook이 동작하는 걸 확인하는 게 목표.</p>
+<h3 id="단계-34-검증">단계 3.4 — 검증</h3>
+<p>Claude Code 새 세션을 열고 <em>"내 프로젝트 X에 대해 알려줘"</em> 같이 본인 vault에 적은 프로젝트 이름으로 물어보세요. CLAUDE.md가 로드되어 답이 vault 콘텐츠 기반이어야 합니다.</p>
+<p>세션을 종료하면 <code>wiki/log.md</code>에 한 줄이 추가되어야 합니다.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 3 체크**:Claude Code가 본인 프로젝트를 *이미 알고* 답하면 성공. 로그 한 줄도 남았다면 hook 동작 확인.</div>
+
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **흔한 실수**:hook 명령어의 따옴표 escape — Windows에서는 backslash가 두 번이어야 함 `\\`. JSON 파싱 에러 나면 거의 100% 따옴표/슬래시.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 커스터마이징 — Stop 외 다른 hook 이벤트**:Claude Code는 6가지 이상의 hook 이벤트 지원. 활용 예시:
+> - **`SessionStart`** — 세션 시작 시 자동 실행. 예: 본인 calendar / Today.md 인쇄 후 *"오늘 우선순위는 X"* 자동 안내.
+> - **`PostToolUse` (matcher: `Write|Edit`)** — 파일 수정될 때마다. 예: vault 안 .md가 저장되면 즉시 `update_today.ps1` 트리거 (2시간 기다리지 않고 즉시 반영).
+> - **`UserPromptSubmit`** — 본인이 메시지 보내기 직전 트리거. 예: 자동으로 ontology 최신 상태 prompt에 주입.
+>
+> 본인이 hook 추가/변경하면 `wiki/sources/My Hook Setup.md` 노트로 어떤 이벤트에 어떤 명령을 매핑했는지, 왜 그랬는지 기록 남기세요. 향후 본인이나 협업자가 *"이 자동화는 어디서 트리거되지"* 추적 가능.</div>
+
+<hr />
+<h2 id="day-4-매-2시간-자동-트래커">Day 4 — 매 2시간 자동 트래커</h2>
+<p><strong>오늘의 목표</strong>: 본인이 일하지 않을 때도 시스템이 자동으로 새 노트를 스캔하고 활동 로그를 갱신하게 합니다.</p>
+<h3 id="단계-41-codedaily-trackerps1code-작성">단계 4.1 — <code>daily_tracker.ps1</code> 작성</h3>
+<p>vault <code>scripts/</code> 안에 작성. 처음엔 <em>최소 버전</em>만:</p>
+<pre><code class="language-powershell">$VaultRoot = 'C:\Users\&lt;you&gt;\ObsidianVault'
+$ActivityDir = Join-Path $VaultRoot 'wiki\activity'
+$today = (Get-Date).ToString('yyyy-MM-dd')
+$note  = Join-Path $ActivityDir &quot;$today.md&quot;
+
+if (-not (Test-Path $ActivityDir)) { New-Item -ItemType Directory $ActivityDir -Force | Out-Null }
+
+# 최근 24h 변경된 vault 파일 수집
+$lines = @(&quot;# Activity $today&quot;, &quot;&quot;)
+$cutoff = (Get-Date).AddHours(-24)
+$recent = Get-ChildItem -Path &quot;$VaultRoot\wiki&quot; -Recurse -File -Include *.md |
+    Where-Object { $_.LastWriteTime -gt $cutoff } |
+    Sort-Object LastWriteTime -Descending | Select-Object -First 30
+
+$lines += &quot;## File activity (last 24h)&quot;
+foreach ($f in $recent) {
+    $rel = $f.FullName.Replace($VaultRoot, '').Replace('\','/')
+    $lines += &quot;- $($f.LastWriteTime.ToString('HH:mm')) ``$rel``&quot;
+}
+
+Set-Content -Path $note -Value ($lines -join &quot;`r`n&quot;) -Encoding UTF8
+Write-Output &quot;Wrote $note&quot;
+</code></pre>
+<h3 id="단계-42-windows-예약-작업-등록">단계 4.2 — Windows 예약 작업 등록</h3>
+<p>PowerShell을 관리자 권한으로 실행 → 다음 명령:</p>
+<pre><code class="language-powershell">schtasks.exe /Create /TN &quot;ResearchAssistantTracker&quot; `
+  /SC DAILY /ST 00:00 /RI 120 /DU 23:59 `
+  /TR &quot;powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\&lt;you&gt;\ObsidianVault\scripts\daily_tracker.ps1&quot; /F
+</code></pre>
+<p>이게 <em>매일 00:00 시작 + 매 120분 반복 + 23:59 동안 지속</em> 패턴 → <strong>하루 12회</strong> 자동 실행 (00, 02, 04, 06, ..., 22).</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 커스터마이징 — 본인 리듬에 맞게**:위 명령의 두 숫자만 바꾸면 됩니다.
+> - **`/RI 120`** = 반복 간격 (분 단위). `60` = 매시간, `240` = 4시간마다, `360` = 6시간마다, `720` = 12시간마다.
+> - **`/ST 00:00`** = 시작 시각. `09:00` = 오전 9시 시작 → 09, 11, 13... 식으로 그날 23:59 까지 반복.
+> - 일하는 시간대만 (예: 09:00-19:00) 매시간 돌리려면 `/SC DAILY /ST 09:00 /RI 60 /DU 10:00`.
+> - 본인이 트래커 주기를 바꾸면 **이 가이드 옆에 메모로 남겨두세요** — `wiki/sources/My Tracker Setup.md` 같은 노트 만들고 frontmatter에 `tracker_schedule: "/RI 60 /ST 09:00 /DU 10:00"` 라고 적으면 미래의 본인이 *"내가 왜 이렇게 했더라"* 잊지 않음.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 커스터마이징 — 트래커 안의 어떤 단계를 끌까**:`daily_tracker.ps1` 끝부분에서 호출되는 각 스크립트 (`build_ontology.py`, `situation_watch.py`, `organize_desktop.py` 등)는 **개별로 주석 처리** 가능. *"나는 LLM 비용 아끼려고 situation_watch만 매일 한 번 돌리고 싶다"* 하면, situation_watch 호출 줄을 별도 스크립트로 빼고 `/SC DAILY /ST 02:00`로 따로 등록 — 여러 스케줄을 섞을 수 있음.</div>
+
+<h3 id="단계-43-컴퓨터-꺼져있을-때-catch-up-옵션">단계 4.3 — "컴퓨터 꺼져있을 때 catch up" 옵션</h3>
+<pre><code class="language-powershell">$task = Get-ScheduledTask -TaskName ResearchAssistantTracker
+$task.Settings.StartWhenAvailable = $true
+$task.Settings.DisallowStartIfOnBatteries = $false
+Set-ScheduledTask -TaskName ResearchAssistantTracker -Settings $task.Settings
+</code></pre>
+<p>이게 켜져 있어야 컴퓨터 꺼졌다 켤 때 <em>놓친 슬롯을 가능한 빨리 보충</em>해줍니다.</p>
+<h3 id="단계-44-즉시-한-번-실행">단계 4.4 — 즉시 한 번 실행</h3>
+<pre><code class="language-powershell">powershell.exe -File C:\Users\&lt;you&gt;\ObsidianVault\scripts\daily_tracker.ps1
+</code></pre>
+<p><code>wiki/activity/2026-MM-DD.md</code> 파일이 생성되어야 합니다.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 4 체크**:다음 짝수 시간 (예: 14:00)에 vault 보면 새 activity 파일이 자동 생성되어 있어야 합니다.</div>
+
+<hr />
+<h2 id="day-5-온톨로지-vault를-검색-가능한-그래프로">Day 5 — 온톨로지 (vault를 검색 가능한 그래프로)</h2>
+<p><strong>오늘의 목표</strong>: 본인의 모든 entity 페이지를 자동으로 읽어서, <em>"누가 무엇의 PI고, 어떤 메서드를 쓰는가"</em>를 답할 수 있는 그래프로 만듭니다.</p>
+<h3 id="50-온톨로지가-뭐고-왜-필요한가">5.0 — 온톨로지가 뭐고 왜 필요한가</h3>
+<blockquote>
+<p>"온톨로지"라는 말이 어렵게 들릴 수 있는데, 학술적 정의는 잠시 잊고 <strong>두 가지 표만 기억</strong>하면 됩니다:</p>
+</blockquote>
+<p><strong>(1) 타입 (Entity Types) — 모든 페이지를 분류하는 카테고리:</strong></p>
+<table>
+<thead>
+<tr>
+<th>타입</th>
+<th>무엇</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Person</code></td>
+<td>사람 한 명</td>
+<td>본인, 지도학생, 협업자</td>
+</tr>
+<tr>
+<td><code>Project</code></td>
+<td>진행 중인 프로젝트</td>
+<td>"Project A" 같은 연구 시스템</td>
+</tr>
+<tr>
+<td><code>Grant</code></td>
+<td>외부 자금 / 펀딩</td>
+<td>NSF·AERA·KAERA 같은 그랜트 한 건</td>
+</tr>
+<tr>
+<td><code>Concept</code></td>
+<td>방법론·이론·패턴</td>
+<td>"Bayesian Knowledge Tracing", "ECD"</td>
+</tr>
+<tr>
+<td><code>Course</code></td>
+<td>강의 / 워크샵 한 개</td>
+<td>학기당 가르치는 과목</td>
+</tr>
+<tr>
+<td><code>Manuscript</code></td>
+<td>논문 한 편</td>
+<td>저널 제출 / 리뷰 중인 원고</td>
+</tr>
+<tr>
+<td><code>Lab</code> / <code>Institution</code> / <code>Funder</code></td>
+<td>조직</td>
+<td>본인 연구실, 대학, NSF 같은 자금원</td>
+</tr>
+<tr>
+<td><code>Tool</code></td>
+<td>플랫폼·라이브러리</td>
+<td>Supabase, OpenRouter, Three.js</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(2) 관계 (Relations) — 타입 사이를 잇는 의미 있는 연결선:</strong></p>
+<table>
+<thead>
+<tr>
+<th>관계</th>
+<th>의미</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hasPI</code></td>
+<td>"X의 PI는 Y"</td>
+<td>Project A → hasPI → 나</td>
+</tr>
+<tr>
+<td><code>advises</code></td>
+<td>"X는 Y의 advisor"</td>
+<td>나 → advises → 학생1</td>
+</tr>
+<tr>
+<td><code>usesMethod</code></td>
+<td>"X 프로젝트가 Y 메서드 사용"</td>
+<td>Project A → usesMethod → Method A</td>
+</tr>
+<tr>
+<td><code>fundedBy</code></td>
+<td>"X 프로젝트가 Y 그랜트로 펀딩"</td>
+<td>Project A → fundedBy → Grant X</td>
+</tr>
+<tr>
+<td><code>collaboratesWith</code></td>
+<td>"X와 Y가 협업 중"</td>
+<td>나 → collaboratesWith → 협업자</td>
+</tr>
+<tr>
+<td><code>taughtIn</code></td>
+<td>"X 메서드가 Y 강의에서 다뤄짐"</td>
+<td>Method A → taughtIn → Course</td>
+</tr>
+<tr>
+<td><code>relatedTo</code></td>
+<td>(위 관계에 안 맞는 일반 연결)</td>
+<td>기본 fallback</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **온톨로지 = 타입 + 관계.** 그것뿐입니다. 본인이 entity 페이지의 frontmatter (`type:`)와 본문 wikilink (`<span class="wikilink">...</span>`)를 쓰면 → 스크립트가 자동으로 *어떤 타입의 노드가 어떤 관계로 연결되어 있는지* 추출합니다.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 커스터마이징 — 본인 도메인에 맞는 타입 / 관계 추가**:위 표는 *기본 셋*. 본인 분야가 다르면 (예: HCI 연구자라면 `Study`/`Participant` 타입, 임상 연구자라면 `Trial`/`Cohort` 타입) `build_ontology.py` 안의 두 군데만 추가:
+> - **새 타입**: `ENTITY_FALLBACK_BY_TAG` 딕셔너리에 `"study": "Study"` 추가
+> - **새 관계**: `RELATION_RULES` 딕셔너리에 `"recruitedFrom": ([r"recruited from", r"sample drawn from"], {"Study"}, {"Population"})` 같은 줄 추가
+> - 변경 후 `wiki/sources/My Ontology Customization.md` 노트로 *"왜 이 타입을 추가했는지"* 한 줄 남기면 향후 본인 + 협업자가 추적 가능.</div>
+
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schema: types + relations">
+  <!-- title -->
+  <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">SCHEMA · 타입과 관계</text>
+
+  <!-- TYPE BOXES (top row) -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="13" fill="#2a2418">
+    <g>
+      <rect x="20" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#d88a3a" stroke-width="2"/>
+      <text x="70" y="62" text-anchor="middle" font-weight="700">Person</text>
+      <text x="70" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">사람</text>
+    </g>
+    <g>
+      <rect x="135" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#2d7d6e" stroke-width="2"/>
+      <text x="185" y="62" text-anchor="middle" font-weight="700">Project</text>
+      <text x="185" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">진행 프로젝트</text>
+    </g>
+    <g>
+      <rect x="250" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#4a7c59" stroke-width="2"/>
+      <text x="300" y="62" text-anchor="middle" font-weight="700">Grant</text>
+      <text x="300" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">외부 펀딩</text>
+    </g>
+    <g>
+      <rect x="365" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#9b7eb7" stroke-width="2"/>
+      <text x="415" y="62" text-anchor="middle" font-weight="700">Concept</text>
+      <text x="415" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">방법론·이론</text>
+    </g>
+    <g>
+      <rect x="480" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#c4593f" stroke-width="2"/>
+      <text x="530" y="62" text-anchor="middle" font-weight="700">Course</text>
+      <text x="530" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">강의</text>
+    </g>
+    <g>
+      <rect x="595" y="40" width="100" height="56" rx="8" fill="#fff" stroke="#8a7f68" stroke-width="2"/>
+      <text x="645" y="62" text-anchor="middle" font-weight="700">Manuscript</text>
+      <text x="645" y="80" text-anchor="middle" font-size="10" fill="#8a7f68">논문</text>
+    </g>
+  </g>
+
+  <!-- RELATION ARROWS (middle, dashed with labels) -->
+  <g font-family="JetBrains Mono, monospace" font-size="11" fill="#5a5140">
+    <text x="380" y="120" text-anchor="middle" font-weight="700" letter-spacing="1.5" fill="#8a7f68">↓ 관계 ↓</text>
+  </g>
+
+  <!-- Relations as rounded labels in a single row -->
+  <g font-family="JetBrains Mono, monospace" font-size="11">
+    <g>
+      <rect x="20" y="140" width="115" height="32" rx="16" fill="#fff8ed" stroke="#d88a3a"/>
+      <text x="77" y="160" text-anchor="middle" fill="#d88a3a" font-weight="700">hasPI</text>
+    </g>
+    <g>
+      <rect x="148" y="140" width="115" height="32" rx="16" fill="#fff8ed" stroke="#d88a3a"/>
+      <text x="205" y="160" text-anchor="middle" fill="#d88a3a" font-weight="700">advises</text>
+    </g>
+    <g>
+      <rect x="276" y="140" width="115" height="32" rx="16" fill="color-mix(in srgb, #2d7d6e 8%, #fff)" stroke="#2d7d6e"/>
+      <text x="333" y="160" text-anchor="middle" fill="#2d7d6e" font-weight="700">usesMethod</text>
+    </g>
+    <g>
+      <rect x="404" y="140" width="115" height="32" rx="16" fill="color-mix(in srgb, #4a7c59 8%, #fff)" stroke="#4a7c59"/>
+      <text x="461" y="160" text-anchor="middle" fill="#4a7c59" font-weight="700">fundedBy</text>
+    </g>
+    <g>
+      <rect x="532" y="140" width="115" height="32" rx="16" fill="color-mix(in srgb, #9b7eb7 8%, #fff)" stroke="#9b7eb7"/>
+      <text x="589" y="160" text-anchor="middle" fill="#9b7eb7" font-weight="700">taughtIn</text>
+    </g>
+    <g>
+      <rect x="20" y="180" width="115" height="32" rx="16" fill="#fdf2ee" stroke="#c4593f"/>
+      <text x="77" y="200" text-anchor="middle" fill="#c4593f" font-weight="700">cites</text>
+    </g>
+    <g>
+      <rect x="148" y="180" width="115" height="32" rx="16" fill="#fdf2ee" stroke="#c4593f"/>
+      <text x="205" y="200" text-anchor="middle" fill="#c4593f" font-weight="700">extends</text>
+    </g>
+    <g>
+      <rect x="276" y="180" width="115" height="32" rx="16" fill="#fff" stroke="#5a5140"/>
+      <text x="333" y="200" text-anchor="middle" fill="#5a5140" font-weight="700">collaboratesWith</text>
+    </g>
+    <g>
+      <rect x="404" y="180" width="115" height="32" rx="16" fill="#fff" stroke="#5a5140"/>
+      <text x="461" y="200" text-anchor="middle" fill="#5a5140" font-weight="700">builtOn</text>
+    </g>
+    <g>
+      <rect x="532" y="180" width="115" height="32" rx="16" fill="#fff" stroke="#5a5140"/>
+      <text x="589" y="200" text-anchor="middle" fill="#5a5140" font-weight="700">relatedTo</text>
+    </g>
+  </g>
+
+  <!-- bottom: how to read -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="12.5" fill="#2a2418">
+    <rect x="20" y="240" width="720" height="64" rx="8" fill="#f6f3ea" stroke="#5a5140" stroke-dasharray="3 3"/>
+    <text x="40" y="262" font-weight="700" font-size="13">읽는 법:</text>
+    <text x="40" y="282" fill="#5a5140">예) <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">hasPI</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#d88a3a" font-weight="700">[Person]</tspan>  =  "프로젝트 A의 PI는 김교수다"</text>
+    <text x="40" y="298" fill="#5a5140">예) <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">[Project]</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#2d7d6e" font-weight="700">usesMethod</tspan> <tspan font-family="JetBrains Mono, monospace" fill="#9b7eb7" font-weight="700">[Concept]</tspan>  =  "프로젝트 A는 메서드 A를 사용한다"</text>
+  </g>
+</svg>
+<figcaption>스키마 = 타입 6종 + 관계 10종. 본인이 entity 페이지를 쓰면 자동으로 이 그래프가 만들어집니다.</figcaption>
+</figure>
+</p>
+<h3 id="501-어떻게-자동-추출되는가-스크립트-동작">5.0.1 — 어떻게 자동 추출되는가 (스크립트 동작)</h3>
+<p><code>build_ontology.py</code>가 매 2시간마다 다음을 합니다:</p>
+<ol>
+<li><strong><code>wiki/**/*.md</code> 모두 읽기</strong> — frontmatter <code>type:</code> 으로 각 페이지가 어떤 타입인지 결정.</li>
+<li><strong>본문의 <code>&lt;span class="wikilink"&gt;wikilink&lt;/span&gt;</code> 모두 추출</strong> — 단순히 <em>"이 페이지는 저 페이지를 언급한다"</em>는 사실.</li>
+<li><strong>링크 주변 ±100자에서 cue word 매칭</strong> — 예를 들어 본문에 <em>"Project A is funded by Grant X"</em> 라고 쓰여 있으면 <em>"funded by"</em> 가 <code>fundedBy</code> 관계로 변환됨.</li>
+<li><strong>타입 도메인 강제</strong> — <code>hasPI</code>는 <code>Project|Grant → Person</code> 방향이어야 의미 있음. 스크립트가 자동으로 방향 맞춤.</li>
+<li><strong>JSON-LD 출력</strong> — 표준 형식으로 그래프를 export. 다른 도구(SPARQL, 시각화 라이브러리)에서도 읽을 수 있음.</li>
+</ol>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **JSON-LD?** "JSON for Linked Data" — 평범한 JSON에 **`@context`** (어떤 단어가 어떤 의미인지 사전) + **`@graph`** (실제 노드 목록)를 추가한 W3C 표준. RDF·SPARQL 같은 시맨틱 웹 기술과 호환됩니다. 학위논문에서 인용도 가능.</div>
+
+<h3 id="단계-51-codebuild-ontologypycode-다운로드">단계 5.1 — <code>build_ontology.py</code> 다운로드</h3>
+<p>이 가이드의 풀 버전 (<code>Research Assistant System Guide.md</code>)에 ~600줄 짜리 Python 스크립트가 있습니다. 그걸 <code>scripts/build_ontology.py</code>로 복사하세요. 핵심 동작:</p>
+<ol>
+<li><code>wiki/**/*.md</code> 모두 스캔, frontmatter <code>type:</code> 읽기</li>
+<li>각 페이지 본문의 <code>&lt;span class="wikilink"&gt;wikilink&lt;/span&gt;</code> 모두 추출</li>
+<li>위키링크 주변 ±100자에서 cue word 매칭 ("PI", "advisee", "uses", "funded by") → 관계 결정</li>
+<li>결과: <code>wiki/_ontology.json</code> (JSON-LD), <code>wiki/_ontology_graph.html</code> (D3 인터랙티브 그래프)</li>
+</ol>
+<h3 id="단계-52-직접-실행">단계 5.2 — 직접 실행</h3>
+<pre><code class="language-powershell">python C:\Users\&lt;you&gt;\ObsidianVault\scripts\build_ontology.py
+</code></pre>
+<p>출력:</p>
+<pre><code>[ontology] scanning C:\Users\&lt;you&gt;\ObsidianVault\wiki ...
+[ontology] 12 nodes, 35 edges (vault pages)
+[ontology] FINAL: 12 nodes, 35 edges
+[ontology] wrote:
+  C:\Users\&lt;you&gt;\ObsidianVault\wiki\_ontology.json
+  C:\Users\&lt;you&gt;\ObsidianVault\wiki\_ontology_graph.html
+</code></pre>
+<h3 id="단계-53-그래프-보기">단계 5.3 — 그래프 보기</h3>
+<p><code>wiki/_ontology_graph.html</code>을 더블클릭. 브라우저에서 본인의 프로젝트, 사람, 메서드가 <em>색깔별로</em> 노드로 보이고 (Person 주황, Project 파랑, Concept 보라 등), 관계 (hasPI, advises, usesMethod...) 가 엣지로 연결됨.</p>
+<h3 id="단계-54-트래커에-ontology-rebuild-추가">단계 5.4 — 트래커에 ontology rebuild 추가</h3>
+<p><code>daily_tracker.ps1</code> 끝부분에 추가:</p>
+<pre><code class="language-powershell">&amp; python &quot;$VaultRoot\scripts\build_ontology.py&quot;
+</code></pre>
+<p>이제 매 2시간마다 본인의 vault 변경사항이 그래프에 반영됩니다.</p>
+<h3 id="단계-55-빠른-질의-cli">단계 5.5 — 빠른 질의 CLI</h3>
+<p><code>scripts/query_ontology.py</code> 추가 (가이드 풀 버전 참고). 사용:</p>
+<pre><code class="language-powershell">python scripts\query_ontology.py &quot;Project A&quot;      # 특정 노드 + 모든 관계
+python scripts\query_ontology.py --type Grant     # 모든 그랜트
+python scripts\query_ontology.py --predicate hasPI  # 모든 PI 관계
+</code></pre>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 5 체크**:`python query_ontology.py "<본인 이름>"` 실행하면 본인의 advisees, 본인이 PI인 그랜트, 협업자가 모두 나와야 합니다.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **관계 정확도 향상**:entity 페이지 본문에 *"X is the PI of <span class="wikilink">프로젝트</span>"* 처럼 cue word를 자연스럽게 쓰세요. 다음 ontology rebuild가 더 정확한 관계를 추출합니다.</div>
+
+<hr />
+<h2 id="day-6-llm이-본인-노트를-읽고-변화-감지">Day 6 — LLM이 본인 노트를 읽고 변화 감지</h2>
+<p><strong>오늘의 목표</strong>: AI가 <em>"새 노트 / 수정된 노트"</em>를 읽고 <em>"마감일이 바뀌었네", "새 협업자가 추가됐네"</em> 같은 변화를 자동 감지해서 vault에 제안하게 합니다.</p>
+<h3 id="단계-61-openrouter-api-key">단계 6.1 — OpenRouter API key</h3>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **OpenRouter란?** OpenAI / Anthropic / Google 등 여러 LLM 회사의 모델을 *한 개의 API* 로 사용할 수 있게 해주는 프록시 서비스. 모델을 바꾸려면 모델 이름 (예: `google/gemini-2.0-flash-001` → `anthropic/claude-3.5-haiku`) 한 줄만 바꾸면 됩니다. 가격도 각 회사 공식 단가와 동일.
+>
+> **API key란?** 해당 서비스를 호출할 때 *"내가 누군지"*를 증명하는 비밀 문자열 (예: `sk-or-v1-xxxxx...`). 절대 GitHub 같은 공개 장소에 올리면 안 됨.</div>
+
+<p><a href="https://openrouter.ai">openrouter.ai</a> 가입 → $5 충전 → API key 발급 → 저장:</p>
+<pre><code>C:\Users\&lt;you&gt;\Desktop\_secrets\openrouter.txt   ← 이 파일에 키 한 줄
+</code></pre>
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **`_secrets/` 폴더는 절대 vault 안에 두지 마세요.**vault는 옵시디언이 인덱싱하고 (잠재적으로) 동기화될 수 있는 공간. 키는 **별도 폴더**.</div>
+
+<h3 id="단계-62-codesituation-watchpycode">단계 6.2 — <code>situation_watch.py</code></h3>
+<p>가이드 풀 버전의 스크립트를 복사 (~250줄). 핵심 동작:</p>
+<ol>
+<li>최근 24h <code>wiki/sources/</code>에 추가/수정된 파일 스캔</li>
+<li>각 파일의 entity 매칭 + 키워드 ("deadline", "decision", "submitted") 점수화</li>
+<li>상위 10개를 OpenRouter (Gemini Flash) 에 보내 구조화 JSON으로 <em>"무엇이 바뀌었는지"</em> 받기</li>
+<li>결과를 <code>wiki/situation/&lt;날짜&gt;.md</code>에 [AUTO] / [REVIEW] 태그로 분류해서 기록</li>
+</ol>
+<h3 id="단계-63-트래커에-추가">단계 6.3 — 트래커에 추가</h3>
+<pre><code class="language-powershell"># daily_tracker.ps1 끝부분
+&amp; python &quot;$VaultRoot\scripts\situation_watch.py&quot; --hours 24
+</code></pre>
+<h3 id="단계-64-첫-실행">단계 6.4 — 첫 실행</h3>
+<pre><code class="language-powershell">python C:\Users\&lt;you&gt;\ObsidianVault\scripts\situation_watch.py --hours 168
+</code></pre>
+<p>(처음에는 168시간 = 7일 윈도우로 돌려서 충분한 데이터 확보.) <code>wiki/situation/&lt;오늘날짜&gt;.md</code> 파일에 다음 같은 결과가:</p>
+<pre><code class="language-markdown">### [AUTO] Project A — deadline_update
+- new_value: 2026-09-01
+- confidence: 0.92
+- reason: Project A README에 새 deadline 명시됨
+- evidence: &quot;Final pilot deadline pushed to September 1, 2026&quot;
+</code></pre>
+<h3 id="단계-65-codeapply-situationpycode로-적용">단계 6.5 — <code>apply_situation.py</code>로 적용</h3>
+<pre><code class="language-powershell">python C:\Users\&lt;you&gt;\ObsidianVault\scripts\apply_situation.py
+</code></pre>
+<p>이 명령은 [AUTO] 항목 (confidence ≥ 0.85) 만 자동 적용. [REVIEW] 항목은 본인이 직접 검토 후 <code>--review</code> 플래그로 적용.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 6 체크**:situation note에 *"본인이 알고 있던 변화"*가 자동 감지되어 있어야 합니다. 그러면 시스템이 본인의 vault를 *읽고 이해하고* 있다는 뜻.</div>
+
+<div class="callout callout-warn"><span class="cb">⚠ WATCH OUT</span> **자동 적용 정책은 보수적**:AI는 deadline / status / progress 같은 *팩트* 변경만 자동 적용. 새 협업자 추가, 메서드 변경 같은 *해석*이 필요한 변경은 [REVIEW]로 남겨서 본인이 결정.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 커스터마이징 — 3가지 다이얼**:`situation_watch.py` 상단의 세 상수가 시스템 *기질*을 결정합니다:
+> - **`MODEL = "google/gemini-2.0-flash-001"`** — 비용 ↓ / 품질 적당. 더 정확하게 하려면 `"anthropic/claude-3.5-haiku"` 또는 `"anthropic/claude-3.5-sonnet"` (10×~50× 비용이지만 여전히 한 달 수 달러).
+> - **`AUTO_THRESHOLD = 0.85`** — 자동 적용 confidence 하한. `0.95`로 올리면 더 보수적 (의심스러운 건 모두 [REVIEW]), `0.75`로 내리면 공격적.
+> - **`IMPORTANCE_KEYWORDS`** 리스트 — 본인 도메인 키워드 추가. 예: 임상 연구자라면 `r"\bIRB approval\b"`, `r"\bDSMB\b"`, `r"\benrollment milestone\b"`. HCI 연구자라면 `r"\bpilot N\b"`, `r"\bThink-aloud\b"`.
+>
+> 본인이 임계값/모델/키워드를 바꿨으면 `wiki/sources/My LLM Tuning.md`에 *"2026-05-XX 임계값을 0.90→0.80으로 내림. 이유: 마감 변경 missing이 많아서"* 식으로 결정 근거 남기세요. 6개월 후 본인이 *"왜 이래뒀더라"* 잊지 않게.</div>
+
+<hr />
+<h2 id="day-7-slides-발표자료-자동-생성">Day 7 — /slides — 발표자료 자동 생성</h2>
+<p><strong>오늘의 목표</strong>: 본인이 <em>"AI 윤리 강의용 슬라이드 만들어줘"</em> 한 줄 입력하면, vault 콘텐츠를 끌어와서 단일 HTML 슬라이드덱이 자동 생성되게 합니다.</p>
+<h3 id="단계-71-open-design-스킬-캐시">단계 7.1 — open-design 스킬 캐시</h3>
+<pre><code class="language-powershell">mkdir C:\Users\&lt;you&gt;\Desktop\_tools\open-design-cache\skills
+</code></pre>
+<p>다섯 개 슬라이드 스킬을 GitHub에서 fetch (코드 실행 없음, 마크다운만):</p>
+<pre><code class="language-powershell"># 매거진 스타일 (기본)
+gh api &quot;repos/nexu-io/open-design/contents/skills/guizang-ppt/SKILL.md&quot; --jq '.content' | base64 -d &gt; C:\Users\&lt;you&gt;\Desktop\_tools\open-design-cache\skills\magazine-web-ppt\SKILL.md
+
+# 강의용 (warm paper + learning objectives)
+gh api &quot;repos/nexu-io/open-design/contents/skills/html-ppt-course-module/SKILL.md&quot; --jq '.content' | base64 -d &gt; C:\Users\&lt;you&gt;\Desktop\_tools\open-design-cache\skills\html-ppt-course-module\SKILL.md
+
+# 시스템 아키텍처 / 메서드론
+gh api &quot;repos/nexu-io/open-design/contents/skills/html-ppt-knowledge-arch-blueprint/SKILL.md&quot; --jq '.content' | base64 -d &gt; C:\Users\&lt;you&gt;\Desktop\_tools\open-design-cache\skills\html-ppt-knowledge-arch-blueprint\SKILL.md
+</code></pre>
+<p>(나머지 두 스킬도 동일 패턴으로 가져오세요. 각 스킬 디렉토리 안에 <code>references/</code>, <code>assets/template.html</code>, <code>example.html</code>도 fetch — 풀 가이드 참고.)</p>
+<h3 id="단계-72-codeclaudecommandsslidesmdcode">단계 7.2 — <code>~/.claude/commands/slides.md</code></h3>
+<p>이게 슬래시 커맨드. Claude Code에서 <code>/slides &lt;주제&gt;</code>를 입력했을 때 어떻게 동작할지 hardcode 한 markdown 파일:</p>
+<pre><code class="language-markdown">---
+description: vault content + open-design skill template으로 HTML slide deck 생성
+argument-hint: &quot;&lt;topic&gt; [--skill &lt;skill-name&gt;]&quot;
+---
+
+사용자가 `/slides $ARGUMENTS`를 실행함. 다음 순서대로:
+
+1. **스킬 자동 선택**:
+   - &quot;강의 / teaching / 워크샵&quot; → html-ppt-course-module
+   - &quot;메서드론 / 아키텍처 / framework&quot; → html-ppt-knowledge-arch-blueprint
+   - 기타 → magazine-web-ppt (기본)
+
+2. **스킬 파일 읽기**:
+   - C:\Users\&lt;you&gt;\Desktop\_tools\open-design-cache\skills\&lt;skill-id&gt;\SKILL.md
+   - 같은 폴더의 references/, assets/template.html (또는 example.html)
+
+3. **vault 콘텐츠 끌어오기**:
+   - wiki/entities/&lt;topic&gt;.md 직접 읽기
+   - wiki/concepts/ 관련 페이지 grep
+   - python query_ontology.py &quot;&lt;topic&gt;&quot; 으로 관련 노드 끌기
+
+4. **outline 먼저 제안** — 8-15 슬라이드 구조를 사용자에게 보여주고 OK 받기
+
+5. **단일 self-contained HTML 생성** — CSS/JS inline, fonts CDN, 외부 자산 없음
+   출력: Desktop\_PTs\&lt;YYYY-MM-DD&gt;_&lt;topic-slug&gt;\index.html
+
+6. **브라우저로 자동 열기**.
+</code></pre>
+<h3 id="단계-73-사용">단계 7.3 — 사용</h3>
+<p>Claude Code 세션에서 입력:</p>
+<pre><code>/slides Project A 메서드론
+</code></pre>
+<p>Agent가 outline 먼저 제안 → 본인 승인 → 3-5분 안에 HTML 생성 → 브라우저 자동 오픈.</p>
+<div class="callout callout-check"><span class="cb">✓ CHECK</span> **Day 7 체크**:`Desktop\_PTs\<날짜>_<주제-슬러그>\index.html` 파일이 생성되고, 브라우저에서 본인의 vault 콘텐츠가 매거진 스타일로 보여야 합니다.</div>
+
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **🛠 커스터마이징 — 새 스킬 / 새 슬래시 커맨드 추가**:> - **새 슬라이드 스킬**: open-design 레포에 30+ 스킬 있음. 가져오려면 `gh api "repos/nexu-io/open-design/contents/skills/<id>/SKILL.md" --jq '.content' | base64 -d > Desktop\_tools\open-design-cache\skills\<id>\SKILL.md` 후 `~\.claude\commands\slides.md`의 §2 라우팅 표에 한 줄 추가.
+> - **새 슬래시 커맨드** (예: `/literature-review`, `/grant-budget`, `/student-feedback`): `~\.claude\commands\<name>.md` 파일 만들고 frontmatter + prompt body 작성 → 즉시 사용 가능. 본인이 자주 하는 작업을 자동화하기 좋음.
+> - **본인 스킬 작성** (open-design 외): SKILL.md 형식만 맞추면 자체 템플릿도 가능. `wiki/sources/My Custom Skills.md` 노트에 *어떤 상황에 어떤 스킬을 만들었는지* 기록.</div>
+
+<hr />
+<h2 id="7일-후-일상의-흐름">7일 후 — 일상의 흐름</h2>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- timeline -->
+  <line x1="40" y1="100" x2="720" y2="100" stroke="#0a1f3d" stroke-width="2"/>
+  <g font-family="Inter, sans" fill="#0a1f3d">
+    <!-- 5 milestones -->
+    <g>
+      <circle cx="80" cy="100" r="10" fill="#3b82f6"/>
+      <text x="80" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">아침</text>
+      <text x="80" y="135" text-anchor="middle" font-size="11" font-weight="600">Today.md 열기</text>
+      <text x="80" y="150" text-anchor="middle" font-size="10" opacity="0.7">마감 / 우선순위</text>
+      <text x="80" y="165" text-anchor="middle" font-size="10" opacity="0.7">/ 지난 밤 변화</text>
+    </g>
+    <g>
+      <circle cx="220" cy="100" r="10" fill="#f59e0b"/>
+      <text x="220" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">작업</text>
+      <text x="220" y="135" text-anchor="middle" font-size="11" font-weight="600">Claude Code 세션</text>
+      <text x="220" y="150" text-anchor="middle" font-size="10" opacity="0.7">CLAUDE.md 자동</text>
+      <text x="220" y="165" text-anchor="middle" font-size="10" opacity="0.7">로드 → 즉시 컨텍스트</text>
+    </g>
+    <g>
+      <circle cx="380" cy="100" r="10" fill="#10b981"/>
+      <text x="380" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">2h</text>
+      <text x="380" y="135" text-anchor="middle" font-size="11" font-weight="600">트래커 자동 갱신</text>
+      <text x="380" y="150" text-anchor="middle" font-size="10" opacity="0.7">새 노트 스캔</text>
+      <text x="380" y="165" text-anchor="middle" font-size="10" opacity="0.7">/ ontology rebuild</text>
+    </g>
+    <g>
+      <circle cx="540" cy="100" r="10" fill="#8b5cf6"/>
+      <text x="540" y="105" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">종료</text>
+      <text x="540" y="135" text-anchor="middle" font-size="11" font-weight="600">Stop hook → 디제스트</text>
+      <text x="540" y="150" text-anchor="middle" font-size="10" opacity="0.7">Sessions/&lt;date&gt;.md</text>
+      <text x="540" y="165" text-anchor="middle" font-size="10" opacity="0.7">에 자동 추가</text>
+    </g>
+    <g>
+      <circle cx="680" cy="100" r="10" fill="#b5392a"/>
+      <text x="680" y="105" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">주말</text>
+      <text x="680" y="135" text-anchor="middle" font-size="11" font-weight="600">[REVIEW] 검토</text>
+      <text x="680" y="150" text-anchor="middle" font-size="10" opacity="0.7">apply_situation</text>
+      <text x="680" y="165" text-anchor="middle" font-size="10" opacity="0.7">--review</text>
+    </g>
+    <text x="380" y="30" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="18">하루의 흐름</text>
+    <text x="380" y="50" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" opacity="0.55" letter-spacing="2">DAILY LOOP</text>
+  </g>
+</svg>
+<figcaption>아침-작업-2시간-종료-주말 — 본인이 손으로 하는 건 아침/주말 두 번뿐.</figcaption>
+</figure>
+</p>
+<p><strong>아침</strong> — Obsidian 열고 <code>Today.md</code> 봅니다. § 2 마감, § 3 우선순위, § 4 <em>"지난 밤 무엇이 변했는가"</em> 한눈에.</p>
+<p><strong>작업 중</strong> — Claude Code 어디서든 켜고 <em>"X에 대해 어떻게 생각해?"</em> 식으로 자연스럽게 물어봅니다. CLAUDE.md + 메모리 자동 로드되어 본인 컨텍스트 즉시 잡힘.</p>
+<p><strong>매 2시간 (백그라운드)</strong> — 트래커 자동 실행. 새 노트 스캔, ontology rebuild, situation 변화 감지, Today.md 갱신. 본인은 아무것도 안 해도 됨.</p>
+<p><strong>세션 종료</strong> — Stop hook이 자동으로 세션 디제스트를 <code>wiki/sources/Sessions &lt;날짜&gt;.md</code>에 추가. 다음 세션이 그걸 읽고 컨텍스트 이어감.</p>
+<p><strong>주말</strong> — <code>wiki/situation/&lt;지난 날짜&gt;.md</code> 파일들 훑어봐서 [REVIEW] 항목 검토. 적용할 거 적용. ontology graph 한 번 열어봐서 본인 portfolio 시각적으로 확인.</p>
+<hr />
+<h2 id="실제-시나리오-어떤-상황에서-가장-도움이-되는가">실제 시나리오 — 어떤 상황에서 가장 도움이 되는가</h2>
+<p>추상적인 "vault + ontology"가 아닌 <strong>연구자/박사과정 일상의 구체 순간</strong>에서 어떻게 작동하는지 5가지:</p>
+<p>
+<figure class="diagram">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="5 use scenarios">
+  <text x="20" y="22" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2" fill="#8a7f68">USE CASES · 박사·연구자 일상</text>
+
+  <!-- 5 scenario cards in 2 rows -->
+  <g font-family="Pretendard Variable, Inter, sans-serif">
+
+    <!-- Card 1: Dissertation chapter -->
+    <g>
+      <rect x="20" y="40" width="230" height="130" rx="10" fill="#fff" stroke="#2d7d6e" stroke-width="2"/>
+      <circle cx="50" cy="68" r="12" fill="#2d7d6e"/>
+      <text x="50" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">1</text>
+      <text x="74" y="72" font-size="14" font-weight="700" fill="#2a2418">디서테이션 챕터</text>
+      <text x="36" y="98" font-size="11.5" fill="#5a5140">6개월 전 advisor 결정</text>
+      <text x="36" y="115" font-size="11.5" fill="#5a5140">근거를 5분 안에 회수</text>
+      <rect x="36" y="128" width="200" height="28" rx="4" fill="#f6f3ea"/>
+      <text x="46" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#2d7d6e">grep Sessions*.md "Method A"</text>
+    </g>
+
+    <!-- Card 2: Grant deadline -->
+    <g>
+      <rect x="265" y="40" width="230" height="130" rx="10" fill="#fff" stroke="#d88a3a" stroke-width="2"/>
+      <circle cx="295" cy="68" r="12" fill="#d88a3a"/>
+      <text x="295" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">2</text>
+      <text x="319" y="72" font-size="14" font-weight="700" fill="#2a2418">그랜트 D-7 패닉</text>
+      <text x="281" y="98" font-size="11.5" fill="#5a5140">9개 docx 일관성 자동</text>
+      <text x="281" y="115" font-size="11.5" fill="#5a5140">검토 + 마감 D-counter</text>
+      <rect x="281" y="128" width="200" height="28" rx="4" fill="#fff8ed"/>
+      <text x="291" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#d88a3a">situation_watch [AUTO]</text>
+    </g>
+
+    <!-- Card 3: New advisee -->
+    <g>
+      <rect x="510" y="40" width="230" height="130" rx="10" fill="#fff" stroke="#9b7eb7" stroke-width="2"/>
+      <circle cx="540" cy="68" r="12" fill="#9b7eb7"/>
+      <text x="540" y="73" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">3</text>
+      <text x="564" y="72" font-size="14" font-weight="700" fill="#2a2418">새 advisee 온보딩</text>
+      <text x="526" y="98" font-size="11.5" fill="#5a5140">portfolio 한눈 시각화</text>
+      <text x="526" y="115" font-size="11.5" fill="#5a5140">5분 안에 자동 생성</text>
+      <rect x="526" y="128" width="200" height="28" rx="4" fill="color-mix(in srgb, #9b7eb7 8%, #fff)"/>
+      <text x="536" y="146" font-family="JetBrains Mono, monospace" font-size="10" fill="#9b7eb7">/slides 내 portfolio</text>
+    </g>
+
+    <!-- Card 4: Reviewer 2 -->
+    <g>
+      <rect x="20" y="190" width="230" height="130" rx="10" fill="#fff" stroke="#c4593f" stroke-width="2"/>
+      <circle cx="50" cy="218" r="12" fill="#c4593f"/>
+      <text x="50" y="223" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">4</text>
+      <text x="74" y="222" font-size="14" font-weight="700" fill="#2a2418">Reviewer 2 답변</text>
+      <text x="36" y="248" font-size="11.5" fill="#5a5140">"왜 X 안 썼나?"에</text>
+      <text x="36" y="265" font-size="11.5" fill="#5a5140">2분 안에 근거 회수</text>
+      <rect x="36" y="278" width="200" height="28" rx="4" fill="#fdf2ee"/>
+      <text x="46" y="296" font-family="JetBrains Mono, monospace" font-size="10" fill="#c4593f">key_decisions 필드 grep</text>
+    </g>
+
+    <!-- Card 5: Comp exam -->
+    <g>
+      <rect x="265" y="190" width="230" height="130" rx="10" fill="#fff" stroke="#4a7c59" stroke-width="2"/>
+      <circle cx="295" cy="218" r="12" fill="#4a7c59"/>
+      <text x="295" y="223" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">5</text>
+      <text x="319" y="222" font-size="14" font-weight="700" fill="#2a2418">Comp Exam 준비</text>
+      <text x="281" y="248" font-size="11.5" fill="#5a5140">80편 논문 인용 네트워크</text>
+      <text x="281" y="265" font-size="11.5" fill="#5a5140">자동으로 그래프화</text>
+      <rect x="281" y="278" width="200" height="28" rx="4" fill="color-mix(in srgb, #4a7c59 8%, #fff)"/>
+      <text x="291" y="296" font-family="JetBrains Mono, monospace" font-size="10" fill="#4a7c59">--predicate cites</text>
+    </g>
+
+    <!-- Pattern card (right bottom) -->
+    <g>
+      <rect x="510" y="190" width="230" height="130" rx="10" fill="#2a2418" stroke="#d88a3a" stroke-width="2"/>
+      <text x="530" y="222" font-size="14" font-weight="800" fill="#d88a3a">공통 패턴</text>
+      <text x="530" y="242" font-size="11.5" fill="#f4f1e8">평소 vault에 흔적</text>
+      <text x="530" y="259" font-size="11.5" fill="#f4f1e8">+ Stop hook 자동 기록</text>
+      <text x="530" y="276" font-size="11.5" fill="#f4f1e8">+ ontology 자동 추출</text>
+      <text x="530" y="298" font-size="11" fill="#d88a3a" font-style="italic">→ 미래의 본인이 즉시 회수</text>
+    </g>
+  </g>
+
+  <!-- bottom note -->
+  <g font-family="Pretendard Variable, Inter, sans-serif" font-size="11.5" fill="#8a7f68">
+    <text x="380" y="346" text-anchor="middle">시스템이 *추가 부담을 주지 않고* — 평소 작업의 흔적만으로 미래의 본인에게 자료를 쌓아둠</text>
+  </g>
+</svg>
+<figcaption>5가지 일상 시나리오 — 각 카드는 *상황 / 결과 / 핵심 명령*. 우하단은 공통 패턴.</figcaption>
+</figure>
+</p>
+<h3 id="시나리오-1-디서테이션-챕터-막힘-박사-4년차">시나리오 1 — 디서테이션 챕터 막힘 (박사 4년차)</h3>
+<p><strong>상황</strong>: Chapter 3 메서드 작성 중. 6개월 전 advisor와 <em>"어떤 추정 방법 쓸지"</em> 결론 내렸던 게 가물가물. 그날 회의 어디 적었더라.</p>
+<table>
+<thead>
+<tr>
+<th>없을 때</th>
+<th>있을 때</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slack DM 검색 + 옛 메모 폴더 + 이메일 검색 → 30-45분</td>
+<td><code>python query_ontology.py "Method A"</code> → 그 메서드 쓰는 모든 프로젝트 + advisor session 디제스트 자동 출력. <code>Read wiki/sources/Sessions 2025-11-XX.md</code> 한 번이면 그날 결정 5줄 요약 + 거절했던 대안 method까지. <strong>3분</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **핵심**:Day 3의 Stop hook이 매 세션마다 디제스트 자동 기록하기 때문. 6개월 전 결정의 근거가 사라지지 않음.</div>
+
+<h3 id="시나리오-2-그랜트-마감-d-7-패닉">시나리오 2 — 그랜트 마감 D-7 패닉</h3>
+<p><strong>상황</strong>: 외부 그랜트 마감 일주일 남음. narrative / 예산 / 인용 / current support 9개 docx 일관성 깨졌을지 걱정. 어디부터 보지.</p>
+<table>
+<thead>
+<tr>
+<th>없을 때</th>
+<th>있을 때</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9개 파일 manual diff. <em>"narrative v5에서 예산 $35K → docx 안 어디는 $30K로 남아있던데"</em> 같은 미스 발생</td>
+<td><code>wiki/entities/&lt;그랜트&gt;.md</code> frontmatter <code>deadline:</code>이 자동 D-7 카운트. situation_watch가 매 2시간 새 파일 변화 LLM-검토 → <em>"narrative v5에 예산 $35K, current_support v3에 $30K — 불일치 의심 conf 0.91"</em> 자동 감지해서 Today.md에 표시. <strong>마감 전 검출</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **핵심**:Day 6 situation_watch가 *"본인이 놓칠 수 있는 변화"*를 미리 잡아냄. 마감 직전 체크리스트가 자동으로 만들어짐.</div>
+
+<h3 id="시나리오-3-새-advisee-온보딩">시나리오 3 — 새 advisee 온보딩</h3>
+<p><strong>상황</strong>: 박사생 한 명 새로 받음. <em>"내 연구 portfolio가 뭐고 어떤 메서드 쓰는지"</em> 한 시간 안에 설명해야 함.</p>
+<table>
+<thead>
+<tr>
+<th>없을 때</th>
+<th>있을 때</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PPT 새로 만들기 → 2-3시간. 또는 옛 발표자료 paste.</td>
+<td><code>/slides 내 연구 portfolio</code> 한 줄 → 본인 entity 페이지 + ontology graph + 최근 session 디제스트 자동 통합 → 매거진 스타일 단일 HTML. 옆에 <code>wiki/_ontology_graph.html</code> 도 같이 띄우면 <em>"이게 내 모든 프로젝트와 메서드의 관계도"</em>. <strong>5분</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **핵심**:Day 7의 `/slides` + Day 5의 ontology graph가 *"내 portfolio 한눈 시각화"*를 자동으로 만들어둠. 새 사람 만날 때마다 다시 만들 필요 X.</div>
+
+<h3 id="시나리오-4-reviewer-2-왜-x-메서드-안-썼는지-설명하라">시나리오 4 — Reviewer 2 ("왜 X 메서드 안 썼는지 설명하라")</h3>
+<p><strong>상황</strong>: 저널 R&amp;R 받음. Reviewer 2의 <em>"why didn't you use X-method"</em> 질문 — 6개월 전에 검토했다가 거절한 method인데 거절 이유가 가물.</p>
+<table>
+<thead>
+<tr>
+<th>없을 때</th>
+<th>있을 때</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>옛 미팅 노트 다시 읽기 / 메일 검색 / 본인 기억으로 답변 짜내기 → 답변 모호</td>
+<td><code>grep "X-method" wiki/sources/Sessions*.md</code> → 6개월 전 그 method 검토했던 세션 발견 → key_decisions에 <em>"computational cost prohibitive at N=2000, switched to method A"</em> 라고 본인이 그때 기록. 답변이 명확하고 짧음. <strong>2분</strong>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **핵심**:Day 3 session digest의 `key_decisions` 필드가 *결정의 근거*를 매 세션 자동 추출. 거절된 옵션이 사라지지 않음 → 미래의 본인이 변호 가능.</div>
+
+<h3 id="시나리오-5-comp-exam-quals-준비">시나리오 5 — Comp exam / Quals 준비</h3>
+<p><strong>상황</strong>: 종합시험 한 달 전. 6개월 동안 읽은 논문 80편 + 그 사이 등장한 메서드/이론 정리 필요. 인용 네트워크 그려야 할 것 같은데 어디서 시작.</p>
+<table>
+<thead>
+<tr>
+<th>없을 때</th>
+<th>있을 때</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EndNote/Zotero에 메타만 있고, 메서드 사이 관계는 머릿속 → 빠진 게 많음</td>
+<td>Day 1부터 각 논문을 <code>wiki/sources/&lt;paper&gt;.md</code>로 짧게 정리 (frontmatter <code>type: source</code> + <code>cites: &lt;span class="wikilink"&gt;Method A&lt;/span&gt;</code> + <code>extends: &lt;span class="wikilink"&gt;Theory B&lt;/span&gt;</code>) → Day 5 ontology가 자동으로 <em>"어떤 메서드가 어떤 이론을 cites 하는가"</em> 그래프. <code>python query_ontology.py --predicate cites</code> 로 인용 네트워크. <code>--predicate extends</code> 로 이론 발전 계보. 시각화는 <code>_ontology_graph.html</code>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **핵심**:가이드를 6개월 일찍 시작했다는 가정. 매일 논문 한두 편을 읽으며 vault에 1-2분만 넣으면 → 시험 준비 시점에 인용 그래프가 *이미* 만들어져있음. 마감 직전 작업 0.</div>
+
+<hr />
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **공통 패턴**:위 5가지 시나리오 모두 *"평소 작업할 때 vault에 흔적을 남겨두면 → 필요할 때 컴퓨터가 자동으로 답을 찾아온다"*는 구조. 시스템은 본인의 작업을 *추가로 부담시키지 않고* — 오히려 평소 노트 작성 + Stop hook 자동 기록만으로 — 미래의 본인에게 자료를 쌓아주는 인프라입니다.</div>
+
+<hr />
+<h2 id="자주-막히는-곳-트러블슈팅">자주 막히는 곳 (트러블슈팅)</h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stop hook이 안 걸림</td>
+<td>settings.json 경로 escape 문제</td>
+<td><code>\\</code> 두 번 들어갔는지 확인. PowerShell 명령은 큰따옴표 escape <code>\"</code></td>
+</tr>
+<tr>
+<td>트래커가 매 2시간 안 도는 거 같음</td>
+<td>컴퓨터가 절전모드, 또는 StartWhenAvailable 미설정</td>
+<td><code>schtasks /Query /TN ResearchAssistantTracker /V /FO LIST | Select-String "Last\|Next"</code> 로 마지막 실행 시각 확인</td>
+</tr>
+<tr>
+<td>ontology에 노드 0개</td>
+<td>frontmatter <code>type:</code> 누락</td>
+<td>각 entity 페이지 첫 줄 <code>---</code> 안에 <code>type: project</code> 같이 명시</td>
+</tr>
+<tr>
+<td><code>query_ontology.py "X"</code> 결과 없음</td>
+<td>label 대소문자 불일치</td>
+<td><code>--type Project</code> 으로 전체 리스트 보고 정확한 레이블 확인</td>
+</tr>
+<tr>
+<td>situation_watch가 (LLM error)</td>
+<td>OpenRouter key 없음/만료</td>
+<td><code>_secrets/openrouter.txt</code> 확인, <code>curl -H "Authorization: Bearer &lt;key&gt;" https://openrouter.ai/api/v1/models</code> 로 테스트</td>
+</tr>
+<tr>
+<td>/slides가 빈 슬라이드만 생성</td>
+<td>vault에 해당 entity 없음</td>
+<td>먼저 <code>wiki/entities/&lt;주제&gt;.md</code> 손으로 작성하고 retry</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **거의 모든 막힘은 frontmatter / 경로 escape 문제입니다.** 5분 안에 해결 안 되면 frontmatter 확인 + 경로 backslash 확인부터 하세요.</div>
+
+<hr />
+<h2 id="다음-단계">다음 단계</h2>
+<p>7일 가이드를 끝냈으면, 본인은 이미 작동하는 연구보조 시스템을 갖고 있습니다. 더 깊이 가고 싶다면:</p>
+<ul>
+<li><strong>풀 가이드</strong> (<span class="wikilink">Research Assistant System Guide</span>) — 14개 컴포넌트 모두 자세한 설명, 디자인 결정 트레이드오프, customization 가이드, 200줄 도식.</li>
+<li><strong>온톨로지 v0.2 (이벤트-허브)</strong> — Session/Deck도 노드로 격상하면 <em>"지난 학기 프로젝트 X에 대해 만든 모든 작업물 보여줘"</em> 식 시간-기반 질의 가능.</li>
+<li><strong>Codex 통합</strong> — Codex CLI 쓰면 <code>pwsh codex_digest.ps1</code> 추가해서 동일한 세션 디제스트 파이프라인 적용.</li>
+<li><strong>Desktop 자동 정리</strong> — <code>organize_desktop.py</code> 추가해서 데스크탑 loose 파일도 LLM이 알아서 분류.</li>
+</ul>
+<hr />
+<h2 id="모든-커스터마이징은-노트로-기록-권장-패턴">모든 커스터마이징은 노트로 기록 (권장 패턴)</h2>
+<p>이 가이드의 모든 숫자·임계값·키워드는 <strong>본인 입맛대로 바꿀 수 있게 설계</strong>되어 있습니다 (트래커 주기, LLM 모델, 자동 적용 confidence, ontology 타입, 슬래시 커맨드, hook 이벤트 등). 다만 시스템이 점점 복잡해지면 <em>"3개월 전에 내가 왜 이걸 0.85에서 0.80으로 내렸지"</em> 잊습니다. 그래서:</p>
+<div class="callout callout-tip"><span class="cb">💡 TIP</span> **권장 패턴**:본인이 어떤 부분을 바꿀 때마다 **vault 안 별도 노트**로 결정 근거 남기기.
+>
+> ```
+> wiki/sources/
+> ├── My Tracker Setup.md        ← 트래커 주기 / 시작 시각 / 활성 단계
+> ├── My LLM Tuning.md            ← 모델 선택 / threshold / keywords
+> ├── My Ontology Customization.md ← 추가 type/relation
+> ├── My Hook Setup.md            ← Stop 외 hook 매핑
+> └── My Custom Skills.md         ← 새 슬래시 커맨드 / 슬라이드 스킬
+> ```
+>
+> 각 노트의 frontmatter에 `type: source` + `tags: [tuning, customization]` + 결정 timestamp를 남기면 — ontology가 자동으로 *"내 시스템이 어떻게 진화해왔는가"* 그래프로 만들어줍니다 (Day 5의 ontology가 이런 메타-노트도 노드로 잡음).</div>
+
+<p>이 패턴은 <em>시스템 자체가 본인의 결정 이력을 기록하는</em> 자기-참조 구조를 만들어줍니다. 6개월·1년 후 본인이 <em>"왜 이렇게 셋업했더라"</em> 가 <code>python query_ontology.py "tuning"</code> 한 줄로 답이 나옵니다.</p>
+<hr />
+<h2 id="핵심-원칙-외워두면-좋음">핵심 원칙 (외워두면 좋음)</h2>
+<ol>
+<li><strong>단일 진입점이 검색을 없앤다</strong> — 매일 30분씩 잃는 <em>"어디 적었더라"</em> 대신 <code>Today.md</code> 한 페이지.</li>
+<li><strong>메모리는 prompt engineering보다 강하다</strong> — 매번 재설명할 필요 없게 <code>~/.claude/projects/&lt;machine&gt;/memory/</code>에 영구 저장.</li>
+<li><strong>온톨로지는 평면 태그를 이긴다</strong> — <em>"내가 PI인 모든 그랜트"</em> 식 질문은 그래프 한 줄로.</li>
+<li><strong>LLM은 가장자리에서만</strong> — orchestrator는 평범한 Python/PowerShell. AI는 결정 포인트에서만 (situation 판단, 파일 분류, 슬라이드 생성).</li>
+<li><strong>자동 적용은 보수적으로</strong> — 모든 LLM 제안에 confidence + [REVIEW] 옵션. <em>해석</em>이 필요한 변경은 절대 자동 적용 안 함.</li>
+<li><strong>모든 행동은 되돌릴 수 있어야 한다</strong> — 데스크탑 이동은 undo, frontmatter 변경은 audit log, ontology는 매번 재생성.</li>
+</ol>
+    <div class="closing">
+      <div class="closing-mark">— 7일 가이드 끝 —</div>
+      <div class="closing-note">막히면 풀 가이드 (<span class="wikilink">Research Assistant System Guide</span>) 참고. 좋은 셋업 되시길!</div>
+      <div class="closing-author">
+        <span class="closing-author-label">작성자</span>
+        <strong>문제웅</strong>
+        <span>The University of Alabama</span>
+        <a href="mailto:jmoon19@ua.edu">jmoon19@ua.edu</a>
+      </div>
+    </div>
+  </article>
+</div>
+
+<footer class="bottom">
+  <div class="bottom-inner">
+    <span>연구보조 시스템 · 초심자 가이드</span>
+    <span>Obsidian × Claude Code × OpenRouter</span>
+    <span>로컬 우선 · BYOK · 오픈</span>
+  </div>
+</footer>
+
+<script>
+  const links = document.querySelectorAll('.toc a');
+  const sections = Array.from(document.querySelectorAll('article h1, article h2'));
+  function onScroll() {
+    const y = window.scrollY + 120;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => {
+      const isActive = a.getAttribute('href') === '#' + active;
+      a.classList.toggle('active', isActive);
+      // Toggle on parent <li> too so :has() and .has-active both work
+      if (a.parentElement) a.parentElement.classList.toggle('has-active', isActive);
+    });
+  }
+  window.addEventListener('scroll', onScroll); onScroll();
+  // Also handle direct clicks (immediate visual response before scroll fires)
+  links.forEach(a => a.addEventListener('click', () => {
+    links.forEach(x => {
+      x.classList.remove('active');
+      if (x.parentElement) x.parentElement.classList.remove('has-active');
+    });
+    a.classList.add('active');
+    if (a.parentElement) a.parentElement.classList.add('has-active');
+  }));
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'f' || e.key === 'F') document.body.classList.toggle('narrow');
+    if (e.key === 'd' || e.key === 'D') document.body.classList.toggle('dark');
+  });
+</script>
+</body></html>
