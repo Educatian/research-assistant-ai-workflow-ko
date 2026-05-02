@@ -271,6 +271,134 @@ vault를 Claude Desktop에 연결하면 desktop 앱이 vault에 직접 read/writ
 
 ---
 
+## 3.5. CLI 설치 — Claude Code & Codex
+
+**오늘의 목표는 아니지만**, Day 3부터 Claude Code CLI를 본격적으로 쓰게 되니 미리 설치해두는 게 안전합니다. 둘 다 OS 별로 설치 명령이 다른데, 가장 안정적인 경로를 정리:
+
+### Claude Code (Anthropic) — 주(主) agent
+
+**전제조건**:
+- **Anthropic 구독** — Claude.ai Pro / Max / Team / Enterprise 중 하나. (무료 계정도 일부 제한 사용 가능, 단 hook / 슬래시 커맨드는 구독 필요한 경우 있음)
+- **Node.js 18 이상** (npm 설치 경로용)
+
+**Windows**:
+
+가장 쉬움 — 공식 인스톨러:
+```powershell
+# 1. https://claude.com/claude-code 에서 다운로드 (Windows .exe 인스톨러)
+# 2. 더블클릭 설치
+# 3. 설치 후 새 PowerShell 창에서:
+claude --version          # 버전 출력되면 성공
+claude                    # 첫 실행 → 브라우저로 인증 페이지 자동 열림
+```
+
+또는 npm 경로:
+```powershell
+npm install -g @anthropic-ai/claude-code
+claude --version
+```
+
+**macOS**:
+```bash
+brew install --cask claude-code
+# 또는
+npm install -g @anthropic-ai/claude-code
+```
+
+**Linux**:
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**첫 실행 인증**:
+```
+claude
+```
+→ 브라우저가 자동으로 열려 Anthropic 계정 로그인 요청. 로그인하면 토큰이 `~/.claude/auth.json`에 저장되어 다음부터 자동 인증.
+
+확인:
+```powershell
+claude /help          # 사용 가능한 슬래시 커맨드 목록
+claude /status        # 현재 모델 / 인증 상태 / context window
+```
+
+### Codex (OpenAI) — 보조 agent (선택)
+
+**전제조건**:
+- **ChatGPT 구독** — Plus / Pro / Team / Enterprise 중 하나
+- **Node.js 18 이상**
+
+**Windows**:
+```powershell
+# 공식 인스톨러: https://chatgpt.com/codex
+# 또는 npm:
+npm install -g @openai/codex
+codex --version
+codex                # 첫 실행 → 브라우저 인증
+```
+
+**macOS**:
+```bash
+brew install codex
+# 또는
+npm install -g @openai/codex
+```
+
+**Linux**:
+```bash
+npm install -g @openai/codex
+```
+
+**첫 실행 인증**: `codex` 실행 → 브라우저로 OpenAI 로그인 → 인증 토큰이 `~/.codex/auth.json`에 저장.
+
+확인:
+```powershell
+codex --version
+codex --help          # 사용 가능 명령 목록
+```
+
+### 두 CLI를 함께 쓰는 권장 셋업
+
+```powershell
+# vault 안에서 일하기 (이러면 CLAUDE.md / AGENTS.md 자동 로드)
+cd C:\Users\<나>\ObsidianVault
+
+# 평상시
+claude                 # 주력 작업
+
+# 코드 짤 때 / 또 다른 의견 필요할 때 (선택)
+codex                  # 같은 작업 디렉토리에서 다른 세션 시작
+```
+
+> 💡 **두 agent가 같은 vault를 봅니다.** Claude Code는 부모 폴더에서 `CLAUDE.md`, Codex는 `AGENTS.md`를 자동 로드. 같은 vault 안에 두 파일을 다 두면 양쪽 다 같은 컨텍스트로 시작.
+
+<div class="prompt-box">
+<div class="prompt-label"><span class="prompt-icon">💬</span> Claude Code 이미 설치된 사용자를 위한 prompt — Codex 추가 셋업</div>
+<pre>내 OS는 Windows / macOS / Linux. Codex CLI 설치하고 첫 실행 인증까지 도와줘.
+
+1. Node.js 18+ 설치 확인 (없으면 설치 안내)
+2. npm install -g @openai/codex (또는 OS별 권장 경로)
+3. codex --version 으로 설치 확인
+4. codex 실행 → 브라우저 로그인까지 안내
+
+설치 끝나면 ~/.codex/AGENTS.md 만들어서 vault 위치 알려주는 한 줄 추가:
+"내 vault 위치는 C:\Users\<나>\ObsidianVault\. 모든 작업 시작 전에 wiki/Today.md 먼저 읽어."</pre>
+</div>
+
+### 트러블슈팅
+
+| 증상 | 원인 | 해결 |
+|---|---|---|
+| `claude: command not found` | PATH에 npm global bin 없음 | `npm config get prefix` 출력에 `/bin` 붙인 경로를 PATH에 추가 |
+| 인증 시 브라우저 안 열림 | WSL / SSH 환경 | `claude --no-auto-open` 후 표시되는 URL 수동으로 브라우저에 붙여넣기 |
+| `EACCES` permission denied (npm) | 글로벌 설치 권한 | sudo (Linux/Mac) 또는 [npm prefix 변경](https://docs.npmjs.com/resolving-eacces-permissions-errors) |
+| Windows에서 `npm install -g` 안 됨 | Node 미설치 | `winget install OpenJS.NodeJS` 또는 nvm-windows |
+| 한글 입력 깨짐 (Windows) | 콘솔 코드페이지 | `chcp 65001` 으로 UTF-8 전환 |
+
+> ⚠️ **구독 vs API key**: Claude Code / Codex는 **구독 인증** (브라우저 로그인) 으로 동작. **OpenRouter API key는 별도** (Day 6에서 사용) — Day 6의 LLM 자동 호출용이지 CLI 인증용이 아닙니다. 헷갈리지 않게.
+
+---
+
 ## Day 1 — Vault 만들기
 
 **오늘의 목표**: Obsidian으로 빈 vault를 만들고, 본인의 가장 활발한 프로젝트 하나에 대한 entity 페이지를 손으로 작성합니다. 자동화는 아직 없습니다.
